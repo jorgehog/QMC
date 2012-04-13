@@ -22,9 +22,9 @@ protected:
 
     double** spatial_grad;
     double** jast_grad;
+    double** inv;
     
-    System* system;
-    Jastrow* jastrow;
+    Jastrow jastrow;
     
     
 public:
@@ -35,14 +35,3 @@ public:
 
 
 };
-
-class Wavefunction : public Walker {
-public:
-    double wf_val;
-    
-    Wavefunction();
-    ~Wavefunction();
-};
-
-#endif	/* WALKER_H */
-
