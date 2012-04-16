@@ -338,11 +338,11 @@ public:
 
 class Potential {
 public:
-    int n_p;
-    int dim;
+int n_p;
+int dim;
 
-    virtual double get_pot_E(const Wavefunction &wf) const = 0;
-    double get_Coulomb(const Wavefunction &wf) const;
+virtual double get_pot_E(const Wavefunction &wf) const = 0;
+double get_Coulomb(const Wavefunction &wf) const;
 };
 
 class Harmonic_osc : public Potential {

@@ -8,8 +8,6 @@
 #ifndef ORBITALS_H
 #define	ORBITALS_H
 
-//test
-
 class Walker;
 class Orbitals {
 protected:

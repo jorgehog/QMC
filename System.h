@@ -9,7 +9,7 @@
 #define	SYSTEM_H
 
 class Potential;
-class Kinetics;
+class Jastrow;
 class Orbitals;
 class Walker;
 
@@ -21,8 +21,8 @@ protected:
     double a_asym;
     bool coloumb_switch_on;
 
+    Jastrow jastrow;
     Potential pot;
-    Kinetics kin;
     Orbitals orbital;
 
     virtual double get_wf_val(Walker &walker) = 0;
