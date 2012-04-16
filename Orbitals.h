@@ -8,8 +8,9 @@
 #ifndef ORBITALS_H
 #define	ORBITALS_H
 
-class Walker;
+//test
 
+class Walker;
 class Orbitals {
 protected:
     int n_p;
