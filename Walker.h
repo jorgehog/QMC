@@ -32,6 +32,8 @@ public:
     double abs_relative(int i, int j);
 
     void make_rel_matrix();
+    
+    bool is_singular();
 
 
 };
