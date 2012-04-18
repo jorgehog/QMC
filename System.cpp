@@ -7,12 +7,5 @@
 
 #include "System.h"
 
-System::System() {
-}
 
-System::System(const System& orig) {
-}
-
-System::~System() {
-}
 

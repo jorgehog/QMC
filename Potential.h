@@ -19,6 +19,7 @@ public:
 protected:
     int n_p;
     int dim;
+    bool coulomb_on = true;
 
     double get_Coulomb(const Walker &walker) const;
 
@@ -32,7 +33,7 @@ protected:
 
 public:
     
-    Harmonic_osc(const QMC &qmc, double W);
+    Harmonic_osc(int n_p, int dim, double W, bool coulomb_on);
 
     virtual double get_pot_E(const Walker& walker) const;
 

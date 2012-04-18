@@ -24,23 +24,23 @@ public:
 
     virtual double get_val(Walker &walker) = 0;
     virtual double get_j_ratio(Walker &walker_new, Walker &walker_old, int i) = 0;
-    void get_grad(Walker &walker);
+    //void get_grad(Walker &walker); In walker
     virtual double get_lapl_sum(const Walker &walker) const = 0;
 
 };
 
 class No_Jastrow : public Jastrow {
 protected:
-     virtual double get_deriv(Walker &walker, int i, int k) = 0;
+     virtual double get_deriv(Walker &walker, int i, int k){return 0;};
     
 public:
-    No_Jastrow();
+    No_Jastrow() {};
     
-    virtual void initialize(const System &system) const;
+    virtual void initialize(const System &system) const {};
 
-    virtual double get_j_ratio(Wavefunction &wf_new, Wavefunction &wf_old, int i);
-    virtual double get_val(Wavefunction &wf);
-    virtual double get_lapl_sum(const Wavefunction &wf) const;
+    virtual double get_j_ratio(Wavefunction &wf_new, Wavefunction &wf_old, int i) {return 1;};
+    virtual double get_val(Wavefunction &wf){return 1;};
+    virtual double get_lapl_sum(const Wavefunction &wf) const {return 0;};
 };
 
 class Pade_Jastrow : public Jastrow {
@@ -48,7 +48,7 @@ protected:
     double beta;
     double **a;
     
-     virtual double get_deriv(Walker &walker, int i, int k) = 0;
+     virtual double get_deriv(Walker &walker, int i, int k);
 
 public:
 

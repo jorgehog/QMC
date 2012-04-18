@@ -16,3 +16,12 @@ Walker::Walker(const Walker& orig) {
 Walker::~Walker() {
 }
 
+//Jastrow::get_grad(Walker& walker) {
+//    int i, k;
+//
+//    for (i = 0; i < n_p; i++) {
+//        for (k = 0; k < dim; k++) {
+//            walker.jast_grad[i][k] = get_deriv(walker, i, k);
+//        }
+//    }
+//}

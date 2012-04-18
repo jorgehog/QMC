@@ -23,16 +23,19 @@ public:
 
 };
 
-class qdots : private Orbitals {
+class oscillator_basis_HC : private Orbitals {
 private:
     double alpha;
+    double w;
     
 public:
-    qdots(int n_p, int dim, double ALPHA);
+    oscillator_basis_HC(int n_p, int dim, double alpha);
     
-    virtual double phi(const Walker &walker, int particle, int q_num) = 0;
-    virtual double del_phi(const Walker &walker, int particle, int q_num, int d) = 0;
-    virtual double lapl_phi(const Walker &walker, int particle, int q_num) const = 0;
+    void set_frequency(double w);
+    
+    virtual double phi(const Walker &walker, int particle, int q_num);
+    virtual double del_phi(const Walker &walker, int particle, int q_num, int d);
+    virtual double lapl_phi(const Walker &walker, int particle, int q_num) const;
 };
 
 

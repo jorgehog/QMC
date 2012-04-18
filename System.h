@@ -19,7 +19,7 @@ protected:
     int dim;
     double a_sym;
     double a_asym;
-    bool coloumb_switch_on;
+
 
     Jastrow jastrow;
     Potential pot;
@@ -50,7 +50,7 @@ protected:
     double get_det();
 
 public:
-    Fermion(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbital, bool cs);
+    Fermion(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbital);
     
     
     virtual void initialize(Walker &walker);
