@@ -8,7 +8,7 @@
 #ifndef WALKER_H
 #define	WALKER_H
 
-class Jastrow;
+
 class Walker {
 protected:
     int n_p;
@@ -16,6 +16,9 @@ protected:
     int dim;
     
 public:
+  
+    Walker(int n_p, int dim);
+  
     double** r;
     double** r_rel;
 
@@ -32,8 +35,5 @@ public:
     void make_rel_matrix();
     
     bool is_singular();
-    
-    get_jastgrad(Jastrow &jastrow);
-
 
 };

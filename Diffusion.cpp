@@ -7,12 +7,10 @@
 
 #include "Diffusion.h"
 
+//METROPOLIS maa ha elsetest som setter blokken med spin motsatt av neste bevegede partikkels spin lik gamle.
+
 Diffusion::Diffusion() {
+
 }
 
-Diffusion::Diffusion(const Diffusion& orig) {
-}
-
-Diffusion::~Diffusion() {
-}
 

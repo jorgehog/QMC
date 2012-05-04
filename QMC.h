@@ -24,12 +24,19 @@ protected:
     Diffusion diffusion;
     System system;
 
+    QMC();
+    
     virtual void run_method() = 0;
 
     virtual void initialize() = 0;
 
     virtual void output() = 0;
 
+    void get_gradients(Walker& walker, int particle);
+    void get_gradients(Walker& walker);
+    double get_wf_value(Walker& walker);
+    
+    
 };
 
 class VMC : public QMC {

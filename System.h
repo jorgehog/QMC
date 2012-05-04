@@ -21,20 +21,22 @@ protected:
     double a_asym;
 
 
-    Jastrow jastrow;
     Potential pot;
     Orbitals orbital;
 
-    virtual double get_wf_val(Walker &walker) = 0;
+
+
 
 
 public:
-    
-    virtual void initialize_walker(const Walker &walker) = 0;
-    virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i) = 0;
-    virtual double get_spatial_ratio(const Walker &walker, int i) = 0;
-    virtual void update_old(int i) = 0;
+    System();
 
+    virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i) = 0;
+    virtual double get_spatial_ratio(const Walker &walker, const Walker &walker_old, int i) = 0;
+    virtual void update_old(int i) = 0;
+    virtual double get_spatial_wf(const Walker &walker) = 0;
+    virtual void get_spatial_grad(Walker& walker, int particle) = 0;
+    virtual double get_spatial_lapl_sum(const Walker &walker) = 0;
 
 };
 
@@ -42,21 +44,23 @@ class Fermions : public System {
 protected:
     int n2;
 
+    double ** s_up;
+    double ** s_down;
+
+
     void initialize_slaters(const Walker &walker);
     void invert_slaters();
     void make_merged_inv(const Walker &walker);
-    virtual void get_new_grad(const Walker& walker_old, Walker &walker_new, int particle);
-    virtual void get_init_grad(Walker &walker);
     double get_det();
 
 public:
-    Fermion(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbital);
-    
-    
-    virtual void initialize(Walker &walker);
+    Fermions(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbital);
+
+    virtual void get_spatial_grad(Walker& walker, int particle) = 0;
     virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i);
-    virtual double get_spatial_ratio(const Walker &walker_new, int i);
-    virtual double get_lapl_sum(const Walker &walker) const;
+    virtual double get_spatial_ratio(const Walker &walker_new, const Walker &walker_old, int i);
+    virtual double get_spatial_lapl_sum(const Walker &walker);
+    virtual double get_spatial_wf(const Walker& walker);
 
 };
 

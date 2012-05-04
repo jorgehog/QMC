@@ -7,7 +7,6 @@
       <logicalFolder name="f2" displayName="DMC" projectFiles="true">
       </logicalFolder>
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
-        <itemPath>VMC.h</itemPath>
         <itemPath>vmc_old.h</itemPath>
       </logicalFolder>
       <itemPath>Jastrow.h</itemPath>
@@ -25,7 +24,6 @@
       <logicalFolder name="f2" displayName="DMC" projectFiles="true">
       </logicalFolder>
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
-        <itemPath>VMC.cpp</itemPath>
         <itemPath>vmc_old.cpp</itemPath>
       </logicalFolder>
       <itemPath>Jastrow.cpp</itemPath>

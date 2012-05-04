@@ -40,7 +40,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/QMC.o \
 	${OBJECTDIR}/QMCmain.o \
 	${OBJECTDIR}/Kinetics.o \
-	${OBJECTDIR}/VMC.o \
 	${OBJECTDIR}/lib.o \
 	${OBJECTDIR}/System.o \
 	${OBJECTDIR}/vmc_old.o \
@@ -100,11 +99,6 @@ ${OBJECTDIR}/Kinetics.o: Kinetics.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics.o Kinetics.cpp
-
-${OBJECTDIR}/VMC.o: VMC.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/VMC.o VMC.cpp
 
 ${OBJECTDIR}/lib.o: lib.cpp 
 	${MKDIR} -p ${OBJECTDIR}

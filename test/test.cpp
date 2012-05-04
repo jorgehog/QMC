@@ -1,11 +1,6 @@
-/* 
- * File:   QMCmain.cpp
- * Author: jorgehog
- *
- * Created on 13. april 2012, 17:04
- */
+#include <iostream>
 
-#include <cstdlib>
+
 using namespace std;
 
 double testfunc(int a, int b = 3){
@@ -27,4 +22,3 @@ int main(int argc, char** argv) {
     
     return 0;
 }
-

@@ -10,6 +10,7 @@
 
 
 class Walker;
+
 class Kinetics {
 public:
     Kinetics();
@@ -30,23 +31,20 @@ class Numerical : public Kinetics {
 protected:
     double h, h2;
 
-public:
-    Kinetics_num(QMC &qmc);
-    Kinetics_num(QMC &qmc, double H);
-
     Walker wfplus;
     Walker wfminus;
+
+public:
+    Numerical(int n_p, int dim, double h = 0.0001);
 
     virtual double get_KE(Walker &walker, System &system);
     virtual void get_QF(Walker &walker, System &system);
 
-
 };
-
 
 class Closed_form : public Kinetics {
 public:
-    Kinetics_cf(VMC &vmc);
+    Closed_form(int n_p, int dim);
 
     virtual double get_KE(Walker &walker, System &system);
     virtual void get_QF(Walker &walker, System &system);
