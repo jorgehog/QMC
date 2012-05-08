@@ -13,6 +13,8 @@ class Walker;
 
 class Kinetics {
 public:
+    bool closed_form;
+
     Kinetics();
 
     virtual double get_KE(Walker &walker, System &system) = 0;
@@ -21,8 +23,6 @@ public:
 protected:
     int n_p;
     int dim;
-
-    bool closed_form;
 
 
 };

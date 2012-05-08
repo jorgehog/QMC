@@ -19,6 +19,9 @@ public:
   
     Walker(int n_p, int dim);
   
+    double ratio;
+    double value;
+    
     double** r;
     double** r_rel;
 

@@ -19,13 +19,13 @@ Numerical::Numerical(int n_p, int dim, double h) {
     this->dim = dim;
 }
 
-double Numerical::get_KE(Walker& walker, System& system) {
+double Numerical::get_KE(Walker& walker) {
     int i, j;
     double e_kinetic, wf, wf_min, wf_plus;
 
     //kinetic energy:
 
-    wf = system.get_wf_val(walker);
+    wf = walker.value;
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
@@ -56,11 +56,11 @@ double Numerical::get_KE(Walker& walker, System& system) {
     return e_kinetic;
 }
 
-void Numerical::get_QF(Walker& walker, System& system) {
+void Numerical::get_QF(Walker& walker) {
     int i, j;
     double wf_min, wf_plus, wf;
 
-    wf = system.get_wf_val(walker);
+    wf = walker.value;
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
@@ -118,8 +118,6 @@ double Closed_form::get_KE(Walker& walker, System &system) {
 
 void Closed_form::get_QF(Walker& walker, System &system) {
     int i, j;
-    
-    system.get_gradients(walker);
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {

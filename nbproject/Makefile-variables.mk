@@ -7,21 +7,21 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=GNU-Linux-x86
-CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
+CND_PLATFORM_Debug=Cygwin-Windows
+CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin-Windows
 CND_ARTIFACT_NAME_Debug=qmc
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/qmc
-CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/qmc
+CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin-Windows/package
 CND_PACKAGE_NAME_Debug=qmc.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/qmc.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/qmc.tar
 # Release configuration
-CND_PLATFORM_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
+CND_PLATFORM_Release=Cygwin-Windows
+CND_ARTIFACT_DIR_Release=dist/Release/Cygwin-Windows
 CND_ARTIFACT_NAME_Release=qmc
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/qmc
-CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
+CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/qmc
+CND_PACKAGE_DIR_Release=dist/Release/Cygwin-Windows/package
 CND_PACKAGE_NAME_Release=qmc.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/qmc.tar
+CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/qmc.tar
 #
 # include compiler specific variables
 #

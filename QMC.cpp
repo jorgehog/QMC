@@ -8,6 +8,8 @@
 #include "QMC.h"
 #include "System.h"
 #include "Jastrow.h"
+#include "Kinetics.h"
+#include "Walker.h"
 
 QMC::QMC() {
 }
@@ -23,12 +25,18 @@ void QMC::get_gradients(Walker& walker) {
     system.get_spatial_grad(walker, n2);
 }
 
-double QMC::get_wf_value(Walker& walker) {
-    double value;
+void QMC::get_wf_value(Walker& walker) {
+    walker.value = system.get_spatial_wf(walker) * jastrow.get_val(walker);
+}
 
-    value = system.get_spatial_wf(walker) * jastrow.get_val(walker);
-
-    return value;
+void QMC::calc_for_diffused_walker(Walker& walker_prediff, Walker& walker_postdiff, int particle){
+    system.calc_for_newpos(walker_prediff, walker_postdiff, particle);
+    
+    if (kinetics.closed_form) {
+        get_gradients(walker_postdiff, particle);
+    } else {
+        get_wf_value(walker_postdiff);
+    }
 }
 
 

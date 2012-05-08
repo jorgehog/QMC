@@ -171,74 +171,49 @@ double Fermions::get_spatial_ratio(const Walker& walker_new, const Walker& walke
         s_ratio += orbital.phi(walker_new, particle, q_num) * walker_old.inv[q_num][particle];
     }
 
+    walker_new.ratio = s_ratio;
     return s_ratio;
 }
 
-Fermions::update_inverse(Walker& walker_new, Walker& walker_old, int particle) {
+Fermions::update_inverse(Walker& walker_old, Walker& walker_new, int particle) {
+    int k, l, j, start;
+    double sum;
+
+    start = n2 * (particle >= n2);
+
     //updating the part of the inverse with the same spin as particle i
     for (k = 0; k < n2; k++) {
         for (j = start; j < n2 + start; j++) {
             sum = 0;
-            if (j == i) {
+            if (j == particle) {
                 for (l = 0; l < n2; l++) {
-                    sum += phi(wf_old, i, l) * inv_old[l][j];
+                    sum += orbital.phi(walker_old, particle, l) * walker_old.inv[l][j];
                 }
-                inv_new[k][j] = inv_old[k][i] / s_ratio*sum;
+                walker_new.inv[k][j] = walker_old.inv[k][particle] / walker_new.ratio*sum;
             } else {
                 for (l = 0; l < n2; l++) {
-                    sum += phi(wf_new, i, l) * inv_old[l][j];
+                    sum += orbital.phi(walker_new, particle, l) * walker_old.inv[l][j];
                 }
-                inv_new[k][j] = inv_old[k][j] - inv_old[k][i] / s_ratio*sum;
+                walker_new.inv[k][j] = walker_old.inv[k][j] - walker_old.inv[k][particle] / walker_new.ratio*sum;
             }
         }
     }
 }
 
-Fermions::calc_for_newpos(const Walker& walker_old, Walker& walker_new, int particle) {
-    int j, k, l, start;
+void Fermions::calc_for_newpos(const Walker& walker_old, Walker& walker_new, int particle) {
+    update_inverse(walker_old, walker_new, particle);
+}
+
+double Fermions::get_spatial_lapl_sum(const Walker& walker_new, const Walker &walker_old) {
+    int i, j;
     double sum;
 
-    //UPDATING THE INVERSE
-
-    if (i >= n2) {
-        start = n2;
-    } else {
-        start = 0;
-    }
-
-    //if the last metropolis-test went through, there is no need to overwrite data
-    if (accepted_last == false) {
-        for (j = n2 - start; j < n_p - start; j++) {
-            for (k = 0; k < n2; k++) {
-                inv_new[k][j] = inv_old[k][j];
-            }
+    sum = 0;
+    for (i = 0; i < n_p; i++) {
+        for (j = 0; j < n_p / 2; j++) {
+            sum += orbital.lapl_phi(walker_new, i, j) * walker_old.inv[j][i];
         }
     }
 
-    //updating the part of the inverse with the same spin as particle i
-    for (k = 0; k < n2; k++) {
-        for (j = start; j < n2 + start; j++) {
-            sum = 0;
-            if (j == i) {
-                for (l = 0; l < n2; l++) {
-                    sum += phi(wf_old, i, l) * inv_old[l][j];
-                }
-                inv_new[k][j] = inv_old[k][i] / s_ratio*sum;
-            } else {
-                for (l = 0; l < n2; l++) {
-                    sum += phi(wf_new, i, l) * inv_old[l][j];
-                }
-                inv_new[k][j] = inv_old[k][j] - inv_old[k][i] / s_ratio*sum;
-            }
-        }
-    }
-
-    //GETTING NEW VALS FOR QFORCE
-    if (kinetics.cf) {
-        get_new_grad(wf_old, wf_new, i);
-        jastrow.get_grad(wf_new);
-    } else {
-        get_wf_val(wf_new, jastrow);
-    }
-
+    return sum;
 }

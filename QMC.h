@@ -9,6 +9,8 @@
 #define	QMC_H
 
 class Walker;
+class Diffusion;
+class Kinetics;
 
 class QMC {
 protected:
@@ -23,6 +25,7 @@ protected:
     Jastrow jastrow;
     Diffusion diffusion;
     System system;
+    Kinetics kinetics;
 
     QMC();
     
@@ -34,7 +37,9 @@ protected:
 
     void get_gradients(Walker& walker, int particle);
     void get_gradients(Walker& walker);
-    double get_wf_value(Walker& walker);
+    void get_wf_value(Walker& walker);
+    
+    void calc_for_diffused_walker(Walker &walker_prediff, Walker &walker_postdiff, int particle);
     
     
 };

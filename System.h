@@ -9,7 +9,6 @@
 #define	SYSTEM_H
 
 class Potential;
-class Jastrow;
 class Orbitals;
 class Walker;
 
@@ -19,24 +18,19 @@ protected:
     int dim;
     double a_sym;
     double a_asym;
-
-
+    
     Potential pot;
     Orbitals orbital;
-
-
-
-
 
 public:
     System();
 
-    virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i) = 0;
+    virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int particle) = 0;
     virtual double get_spatial_ratio(const Walker &walker, const Walker &walker_old, int i) = 0;
     virtual void update_old(int i) = 0;
     virtual double get_spatial_wf(const Walker &walker) = 0;
     virtual void get_spatial_grad(Walker& walker, int particle) = 0;
-    virtual double get_spatial_lapl_sum(const Walker &walker) = 0;
+    virtual double get_spatial_lapl_sum(const Walker &walker_new, const Walker &walker_old) = 0;
 
 };
 
@@ -51,6 +45,7 @@ protected:
     void initialize_slaters(const Walker &walker);
     void invert_slaters();
     void make_merged_inv(const Walker &walker);
+    void update_inverse(Walker &walker_old, Walker &walker_new, int particle);
     double get_det();
 
 public:
@@ -59,7 +54,7 @@ public:
     virtual void get_spatial_grad(Walker& walker, int particle) = 0;
     virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i);
     virtual double get_spatial_ratio(const Walker &walker_new, const Walker &walker_old, int i);
-    virtual double get_spatial_lapl_sum(const Walker &walker);
+    virtual double get_spatial_lapl_sum(const Walker &walker_new, const Walker &walker_old);
     virtual double get_spatial_wf(const Walker& walker);
 
 };
