@@ -21,6 +21,7 @@ public:
   
     double ratio;
     double value;
+    double lapl_sum;
     
     double** r;
     double** r_rel;

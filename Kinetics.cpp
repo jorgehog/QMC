@@ -7,6 +7,7 @@
 
 #include "Kinetics.h"
 #include "System.h"
+#include "QMC.h"
 
 Kinetics::Kinetics() {
 
@@ -42,8 +43,12 @@ double Numerical::get_KE(Walker& walker) {
             wfplus.make_rel_matrix();
             wfminus.make_rel_matrix();
 
-            system.get_wf_val(wfplus);
-            system.get_wf_val(wfminus);
+
+            qmc->get_wf_value(wfplus);
+            qmc->get_wf_value(wfminus);
+
+            wf_min = wfminus.value;
+            wf_plus = wfplus.value;
 
             e_kinetic -= (wf_min + wf_plus - 2 * wf);
             wfplus.r[i][j] = walker.r[i][j];
@@ -77,8 +82,11 @@ void Numerical::get_QF(Walker& walker) {
             wfplus.make_rel_matrix();
             wfminus.make_rel_matrix();
 
-            system.get_wf_val(wfplus);
-            system.get_wf_val(wfminus);
+            qmc->get_wf_value(wfplus);
+            qmc->get_wf_value(wfminus);
+
+            wf_min = wfminus.value;
+            wf_plus = wfplus.value;
 
             walker.qforce[i][j] = (wf_plus - wf_min) / (wf * h);
 
@@ -87,6 +95,10 @@ void Numerical::get_QF(Walker& walker) {
 
         }
     }
+}
+
+void Numerical::set_QMCptr(QMC* qmc) {
+    this->qmc = qmc;
 }
 
 Closed_form::Closed_form(int n_p, int dim) {
@@ -107,10 +119,9 @@ double Closed_form::get_KE(Walker& walker, System &system) {
             xterm += walker.jast_grad[i][j] * walker.spatial_grad[i][j];
         }
     }
-    e_kinetic += 2 * xterm;
 
-    //laplacian terms
-    e_kinetic += system.get_lapl_sum(walker);
+
+    e_kinetic = 2 * xterm + walker.lapl_sum;
 
 
     return -0.5 * e_kinetic;

@@ -10,7 +10,7 @@
 //METROPOLIS maa ha elsetest som setter blokken med spin motsatt av neste bevegede partikkels spin lik gamle.
 
 Diffusion::Diffusion() {
-
+    
 }
 
 

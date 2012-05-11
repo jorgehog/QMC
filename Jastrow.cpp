@@ -29,9 +29,7 @@ Pade_Jastrow::Pade_Jastrow(int n_p, int dim, double beta) {
 }
 
 
-//check when a_sym values are 1/2. 1/3 etc. Can these be retrieved from dimention?
-
-void Pade_Jastrow::initialize() const {
+void Pade_Jastrow::initialize() {
     int i, j;
     double a_sym, a_asym;
 

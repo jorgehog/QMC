@@ -18,7 +18,7 @@ protected:
 public:
     Jastrow();
 
-    virtual void initialize(const System &system) const = 0;
+    virtual void initialize() = 0;
 
     virtual double get_val(Walker &walker) = 0;
     virtual double get_j_ratio(Walker &walker_new, Walker &walker_old, int i) = 0;
@@ -38,7 +38,7 @@ public:
         return 0;
     };
 
-    virtual void initialize(const System &system) const {
+    virtual void initialize() {
     };
 
     virtual double get_j_ratio(Wavefunction &wf_new, Wavefunction &wf_old, int i) {
@@ -63,7 +63,7 @@ public:
 
     Pade_Jastrow(const VMC &vmc, double BETA);
 
-    virtual void initialize(const System &system) const;
+    virtual void initialize();
 
     virtual void get_grad(Walker &walker);
 

@@ -10,8 +10,13 @@
 
 
 class Walker;
+class QMC;
 
 class Kinetics {
+protected:
+    int n_p;
+    int dim;
+
 public:
     bool closed_form;
 
@@ -19,11 +24,8 @@ public:
 
     virtual double get_KE(Walker &walker, System &system) = 0;
     virtual void get_QF(Walker &walker, System &system) = 0;
-
-protected:
-    int n_p;
-    int dim;
-
+    
+    virtual void set_QMCptr(QMC* qmc) = 0;
 
 };
 
@@ -31,6 +33,7 @@ class Numerical : public Kinetics {
 protected:
     double h, h2;
 
+    QMC *qmc;
     Walker wfplus;
     Walker wfminus;
 
@@ -39,7 +42,7 @@ public:
 
     virtual double get_KE(Walker &walker, System &system);
     virtual void get_QF(Walker &walker, System &system);
-
+    virtual void set_QMCptr(QMC* qmc);
 };
 
 class Closed_form : public Kinetics {

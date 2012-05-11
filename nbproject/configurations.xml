@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="DMC" projectFiles="true">
+        <itemPath>DMC_old.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
         <itemPath>vmc_old.h</itemPath>
@@ -22,6 +23,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="DMC" projectFiles="true">
+        <itemPath>DMC_old.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
         <itemPath>vmc_old.cpp</itemPath>

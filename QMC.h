@@ -11,6 +11,7 @@
 class Walker;
 class Diffusion;
 class Kinetics;
+class Jastrow;
 
 class QMC {
 protected:
@@ -28,7 +29,7 @@ protected:
     Kinetics kinetics;
 
     QMC();
-    
+
     virtual void run_method() = 0;
 
     virtual void initialize() = 0;
@@ -38,27 +39,29 @@ protected:
     void get_gradients(Walker& walker, int particle);
     void get_gradients(Walker& walker);
     void get_wf_value(Walker& walker);
-    
+
     void calc_for_diffused_walker(Walker &walker_prediff, Walker &walker_postdiff, int particle);
-    
-    
+
+
 };
 
 class VMC : public QMC {
 protected:
     bool dist_to_file;
 
+    virtual void initialize();
+
 public:
 
-    VMC();
+    VMC(int n_p, int dim, int n_c, long random_seed, Jastrow jastrow,
+            Diffusion diffusion, System system, Kinetics kinetics);
+
 
     Walker wfold;
     Walker wfnew;
 
     virtual void run_method();
-    virtual void initialize();
     virtual void output();
-
 
 };
 
@@ -77,7 +80,7 @@ protected:
     //bool singular(int k); MAKE WALKER METHOD
 
     //virtual void update_pos(int k) = 0; THIS IS DIFFUSION
-    
+
     //problem: DMC not equal for IMPORTANCE vs. BF
 
 
