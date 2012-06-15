@@ -16,9 +16,11 @@ class Kinetics {
 protected:
     int n_p;
     int dim;
+    
+    bool closed_form;
 
 public:
-    bool closed_form;
+    
 
     Kinetics();
 
@@ -26,6 +28,10 @@ public:
     virtual void get_QF(Walker &walker, System &system) = 0;
     
     virtual void set_QMCptr(QMC* qmc) = 0;
+    
+    bool get_closed_form(){
+        return closed_form;
+    }
 
 };
 

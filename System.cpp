@@ -25,6 +25,10 @@ Fermions::Fermions(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbit
 
 }
 
+void Fermions::initialize_for_CF(Walker& walker) {
+    make_merged_inv(wf);
+    get_init_grad(wf, jastrow);
+}
 
 
 //MUST HAVE NEW INV HERE

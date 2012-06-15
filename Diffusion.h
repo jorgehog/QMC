@@ -8,26 +8,29 @@
 #ifndef DIFFUSION_H
 #define	DIFFUSION_H
 
+#include <fstream>
+
+class Walker;
+
 class Diffusion {
-private:
+protected:
     int n_p;
     int dim;
-    
+
     double timestep;
     double D;
+
     double std;
-    
-    
+
+
 public:
     Diffusion();
 
-    virtual bool metropolis_test() = 0;
-    virtual void set_trial_pos() = 0;
-    virtual void set_new_pos() = 0;
+    virtual void set_trial_pos(Walker &walker, bool load_VMC_dist = false, std::ifstream* file = NULL);
+    virtual double get_new_pos() = 0;
     virtual void get_new_values() = 0;
     virtual void update_walker() = 0;
     virtual void get_full_ratio() = 0;
-
 
 };
 
@@ -35,9 +38,8 @@ class Fokker_Planck : public Diffusion {
 public:
     Fokker_Planck();
 
-    virtual bool metropolis_test();
     virtual void set_trial_pos();
-    virtual void set_new_pos();
+    virtual double get_new_pos();
     virtual void get_new_values();
     virtual void update_walker();
     virtual void get_full_ratio();
@@ -51,11 +53,10 @@ protected:
 
 class Simple : public Diffusion {
 public:
-    Simple();
+    Simple(int n_p, int dim, double timestep, double D = 0.5);
 
-    virtual bool metropolis_test();
-    virtual void set_trial_pos();
-    virtual void set_new_pos();
+
+    virtual double get_new_pos();
     virtual void get_new_values();
     virtual void update_walker();
     virtual void get_full_ratio();

@@ -25,6 +25,7 @@ protected:
 public:
     System();
 
+    virtual void initialize_for_CF(Walker &walker) = 0;
     virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int particle) = 0;
     virtual double get_spatial_ratio(const Walker &walker, const Walker &walker_old, int i) = 0;
     virtual void update_old(int i) = 0;
@@ -51,6 +52,7 @@ protected:
 public:
     Fermions(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbital);
 
+    virtual void initialize_for_CF(Walker &walker);
     virtual void get_spatial_grad(Walker& walker, int particle) = 0;
     virtual void calc_for_newpos(const Walker &walker_old, Walker &walker_new, int i);
     virtual double get_spatial_ratio(const Walker &walker_new, const Walker &walker_old, int i);

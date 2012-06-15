@@ -8,8 +8,9 @@
 #ifndef QMC_H
 #define	QMC_H
 
+
 class Walker;
-class Diffusion;
+class Sampling;
 class Kinetics;
 class Jastrow;
 
@@ -24,7 +25,7 @@ protected:
     long random_seed;
 
     Jastrow jastrow;
-    Diffusion diffusion;
+    Sampling sampling;
     System system;
     Kinetics kinetics;
 
@@ -36,13 +37,19 @@ protected:
 
     virtual void output() = 0;
 
-    void get_gradients(Walker& walker, int particle);
-    void get_gradients(Walker& walker);
-    void get_wf_value(Walker& walker);
+
 
     void calc_for_diffused_walker(Walker &walker_prediff, Walker &walker_postdiff, int particle);
 
-
+    bool Metropolis_test();
+public:
+    void get_gradients(Walker& walker, int particle);
+    void get_gradients(Walker& walker);
+    void get_wf_value(Walker& walker);
+    
+    bool get_kinetic_bool(){
+        return kinetics.get_closed_form();
+    }
 };
 
 class VMC : public QMC {

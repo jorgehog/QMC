@@ -35,7 +35,7 @@ void QMC::get_wf_value(Walker& walker) {
 void QMC::calc_for_diffused_walker(Walker& walker_prediff, Walker& walker_postdiff, int particle){
     system.calc_for_newpos(walker_prediff, walker_postdiff, particle);
     
-    if (kinetics.closed_form) {
+    if (kinetics.get_closed_form()) {
         get_gradients(walker_postdiff, particle);
         walker_postdiff.lapl_sum = system.get_spatial_lapl_sum(walker_postdiff, walker_prediff) + jastrow.get_lapl_sum(walker_postdiff);
     } else {
@@ -45,16 +45,20 @@ void QMC::calc_for_diffused_walker(Walker& walker_prediff, Walker& walker_postdi
 
 
 
-VMC::VMC(int n_p, int dim, int n_c, long random_seed, Jastrow jastrow, Diffusion diffusion, System system, Kinetics kinetics){
+VMC::VMC(int n_p, int dim, int n_c, long random_seed, Jastrow jastrow, Sampling sampling, System system, Kinetics kinetics){
     this->n_p = n_p;
     this->dim = dim;
     this->n_c = n_c;
     this->random_seed = random_seed;
     this->n2 = n_p/2;
+    
     this->jastrow = jastrow;
-    this->diffusion = diffusion;
+    this->sampling = sampling;
     this->system = system;
     this->kinetics = kinetics;
+    
+    sampling.set_qmc_ptr(this);
+    
     this->dist_to_file = false;
 }
 
@@ -71,5 +75,13 @@ void VMC::run_method(){
 
 void VMC::initialize(){
     jastrow.initialize();
-    diffusion.set_trial_pos() ///stuck: IMPLEMENT DIFFUSIONCPP
+    sampling.set_trial_pos(wfold);
+    
+    
+    
+  
+        
+    } else {
+
+    }
 }
