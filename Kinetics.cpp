@@ -97,8 +97,15 @@ void Numerical::get_QF(Walker& walker) {
     }
 }
 
-void Numerical::set_QMCptr(QMC* qmc) {
-    this->qmc = qmc;
+
+void Numerical::update_necessities_IS(Walker& walker_pre, Walker& walker_post, int particle){
+    qmc->get_system_ptr()->calc_for_newpos(walker_pre, walker_post, particle)
+    qmc->get_wf_value(walker_post);
+}
+
+void Numerical::calculate_energy_necessities_BF(Walker& walker){
+    //No necessities.
+    //laplace?
 }
 
 Closed_form::Closed_form(int n_p, int dim) {
@@ -121,7 +128,7 @@ double Closed_form::get_KE(Walker& walker, System &system) {
     }
 
 
-    e_kinetic = 2 * xterm + walker.lapl_sum;
+    e_kinetic = 2 * xterm + walker.lapl_sum; //LAPLACE??S
 
 
     return -0.5 * e_kinetic;
@@ -137,4 +144,14 @@ void Closed_form::get_QF(Walker& walker, System &system) {
     }
 }
 
+void Closed_form::calculate_energy_necessities_BF(Walker& walker){
+    qmc->get_system_ptr()->initialize(walker);
+    qmc->get_gradients(walker);
+    //laplace?
+}
+
+void Closed_form::update_necessities_IS(Walker& walker_pre, Walker& walker_post, int particle){
+    qmc->get_system_ptr()->calc_for_newpos(walker_pre, walker_post, particle);
+    qmc->get_gradients(walker_post, particle);
+}
 

@@ -16,30 +16,35 @@ class Kinetics {
 protected:
     int n_p;
     int dim;
-    
+
     bool closed_form;
 
+    QMC *qmc;
+
 public:
-    
+
 
     Kinetics();
 
     virtual double get_KE(Walker &walker, System &system) = 0;
     virtual void get_QF(Walker &walker, System &system) = 0;
-    
-    virtual void set_QMCptr(QMC* qmc) = 0;
-    
-    bool get_closed_form(){
+
+    virtual void calculate_energy_necessities_BF(Walker &walker) = 0;
+    virtual void update_necessities_IS(Walker &walker_pre, Walker& walker_post, int particle) = 0;
+
+    bool get_closed_form() {
         return closed_form;
     }
 
+    void set_qmc_ptr(QMC* qmc) {
+        this->qmc = qmc;
+    }
 };
 
 class Numerical : public Kinetics {
 protected:
     double h, h2;
 
-    QMC *qmc;
     Walker wfplus;
     Walker wfminus;
 
@@ -48,7 +53,10 @@ public:
 
     virtual double get_KE(Walker &walker, System &system);
     virtual void get_QF(Walker &walker, System &system);
-    virtual void set_QMCptr(QMC* qmc);
+
+    virtual void calculate_energy_necessities_BF(Walker &walker);
+    virtual void update_necessities_IS(Walker &walker_pre, Walker& walker_post, int particle);
+
 };
 
 class Closed_form : public Kinetics {
@@ -58,6 +66,8 @@ public:
     virtual double get_KE(Walker &walker, System &system);
     virtual void get_QF(Walker &walker, System &system);
 
+    virtual void calculate_energy_necessities_BF(Walker &walker) ;
+    virtual void update_necessities_IS(Walker &walker_pre, Walker& walker_post, int particle);
 };
 
 #endif	/* KINETICS_H */

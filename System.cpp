@@ -25,9 +25,8 @@ Fermions::Fermions(int n_p, int dim, Potential pot, Kinetics kin, Orbitals orbit
 
 }
 
-void Fermions::initialize_for_CF(Walker& walker) {
-    make_merged_inv(wf);
-    get_init_grad(wf, jastrow);
+void Fermions::initialize(Walker& walker) {
+    make_merged_inv(walker);
 }
 
 
@@ -67,7 +66,7 @@ void Fermions::get_spatial_grad(Walker& walker, int particle) {
     }
 }
 
-void Fermions::initialize_slaters(const Walker& walker) {
+void Fermions::initialize_slaters(Walker& walker) {
     int i, q_num;
 
     for (i = 0; i < n2; i++) {
@@ -146,7 +145,7 @@ void Fermions::invert_slaters() {
 
 }
 
-void Fermions::make_merged_inv(const Walker& walker) {
+void Fermions::make_merged_inv(Walker& walker) {
     int i, j;
 
     initialize_slaters(walker);
@@ -166,16 +165,16 @@ double Fermions::get_spatial_wf(const Walker& walker) {
     return get_det();
 }
 
-double Fermions::get_spatial_ratio(const Walker& walker_new, const Walker& walker_old, int particle) {
+double Fermions::get_spatial_ratio(const Walker& walker_post, const Walker& walker_pre, int particle) {
     int q_num;
     double s_ratio;
 
     s_ratio = 0;
     for (q_num = 0; q_num < n2; q_num++) {
-        s_ratio += orbital.phi(walker_new, particle, q_num) * walker_old.inv[q_num][particle];
+        s_ratio += orbital.phi(walker_post, particle, q_num) * walker_pre.inv[q_num][particle];
     }
 
-    walker_new.ratio = s_ratio;
+    walker_post.ratio = s_ratio; //saving for use in update function
     return s_ratio;
 }
 

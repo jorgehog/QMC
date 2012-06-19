@@ -8,7 +8,6 @@
 #ifndef QMC_H
 #define	QMC_H
 
-
 class Walker;
 class Sampling;
 class Kinetics;
@@ -21,6 +20,8 @@ protected:
     int n_p;
     int n2;
     int dim;
+    
+    int accepted;
 
     long random_seed;
 
@@ -29,7 +30,7 @@ protected:
     System system;
     Kinetics kinetics;
 
-    QMC();
+    QMC(int n_p, int dim, int n_c, long random_seed, Jastrow jastrow, Sampling sampling, System system, Kinetics kinetics);
 
     virtual void run_method() = 0;
 
@@ -37,23 +38,42 @@ protected:
 
     virtual void output() = 0;
 
-
+    void update_pos(Walker &walker_pre, Walker &walker_post, int particle);
+    void update_necessities(Walker& walker_pre, Walker& walker_post, int particle);
+    double get_acceptance_ratio(Walker& walker_pre, Walker& walker_post, int particle);
 
     void calc_for_diffused_walker(Walker &walker_prediff, Walker &walker_postdiff, int particle);
+    
+    void calculate_energy_necessities(Walker &walker);
 
-    bool Metropolis_test();
+    bool metropolis_test(double A);
+    void update_walker(Walker &walker_pre, Walker &walker_post, int particle);
+    
 public:
+    
     void get_gradients(Walker& walker, int particle);
     void get_gradients(Walker& walker);
     void get_wf_value(Walker& walker);
     
+    
+    
     bool get_kinetic_bool(){
         return kinetics.get_closed_form();
+    }
+    
+    System* get_system_ptr(){
+        return &system;
+    }
+    
+    Kinetics* get_kinetics_ptr(){
+        return &kinetics;
     }
 };
 
 class VMC : public QMC {
 protected:
+    double vmc_E, E2;
+    
     bool dist_to_file;
 
     virtual void initialize();
@@ -61,7 +81,7 @@ protected:
 public:
 
     VMC(int n_p, int dim, int n_c, long random_seed, Jastrow jastrow,
-            Diffusion diffusion, System system, Kinetics kinetics);
+            Diffusion diffusion, System system, Kinetics kinetics, bool dist_to_file = false);
 
 
     Walker wfold;

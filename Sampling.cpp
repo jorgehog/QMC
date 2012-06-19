@@ -9,23 +9,14 @@
 #include "Diffusion.h"
 #include "Walker.h"
 #include "QMC.h"
+#include "Kinetics.h"
 
 Sampling::Sampling(int n_p, int dim) {
     this->n_p = n_p;
     this->dim = dim;
 }
 
-Importance::Importance(int n_p, int dim, double timestep, double D) : Sampling(int n_p, int dim) {
-    is_importance = true;
-    diffusion = new Fokker_Planck(n_p, dim, timestep, D);
-}
-
-Brute_Force::Brute_Force(int n_p, int dim, double timestep, double D) : Sampling(int n_p, int dim) {
-    is_importance = false;
-    diffusion = new Simple(n_p, dim, timestep, D);
-}
-
-Sampling::set_trial_pos(Walker &walker, bool load_VMC_dist, std::ifstream* file) {
+void Sampling::set_trial_pos(Walker &walker, bool load_VMC_dist, std::ifstream* file) {
     int i, j;
 
     if (load_VMC_dist) {
@@ -47,10 +38,53 @@ Sampling::set_trial_pos(Walker &walker, bool load_VMC_dist, std::ifstream* file)
 
 }
 
-Brute_Force::get_necessities(Walker& walker) {
+double Sampling::get_new_pos(Walker& walker_pre){
+    return diffusion->get_new_pos(walker_pre);
+}
+
+double Sampling::get_g_ratio(Walker& walker_post, Walker& walker_pre, int particle){
+    return diffusion->get_g_ratio(Walker& walker_post, Walker& walker_pre, int particle);
+}
+
+Brute_Force::Brute_Force(int n_p, int dim, double timestep, double D) : Sampling(int n_p, int dim) {
+    is_importance = false;
+    diffusion = new Simple(n_p, dim, timestep, D);
+}
+
+
+void Brute_Force::get_necessities(Walker& walker) {
     if (qmc->get_kinetic_bool()) {
-        system.initialize_for_CF(walker);
+        qmc->get_system_ptr()->initialize(walker);
+        qmc->get_gradients(walker);
     }
 
-    get_wf_value(wfold);
+    qmc->get_wf_value(walker);
+}
+
+void Brute_Force::update_necessities(Walker& walker_pre, Walker& walker_post, int particle){
+    //no necessities
+}
+
+void Brute_Force::calculate_energy_necessities(Walker& walker){
+    qmc->get_kinetics_ptr()->calculate_energy_necessities_BF(walker)
+}
+
+double Brute_Force::get_spatial_ratio(Walker& walker_post, Walker& walker_pre, int particle){
+    qmc->get_wf_value(walker_post);
+    
+    return walker_post.value/walker_pre.value;
+}
+
+
+Importance::Importance(int n_p, int dim, double timestep, double D) : Sampling(int n_p, int dim) {
+    is_importance = true;
+    diffusion = new Fokker_Planck(n_p, dim, timestep, D);
+}
+
+Importance::calculate_energy_necessities(Walker& walker){
+    //no necessities
+}
+
+Importance::update_necessities(Walker& walker_pre, Walker& walker_post, int particle){
+    qmc->get_kinetics_ptr()->update_necessities_IS(Walker& walker_pre, Walker& walker_post, int particle);
 }

@@ -13,10 +13,16 @@ Potential::Potential(){
 }
 
 Harmonic_osc::Harmonic_osc(int N_p, int Dim, double W, bool Coulomb_on = true){
-    coulomb_on = Coulomb_on;
+    
     n_p = N_p;
     dim = Dim;
     w = W;
+    
+    if (Coulomb_on) {
+        coulomb = new full_Coulomb(n_p, dim);
+    } else {
+        coulomb = new no_Coulomb(n_p, dim);
+    }
 }
 
 double Harmonic_osc::get_pot_E(const Walker& walker) const {
@@ -30,10 +36,24 @@ double Harmonic_osc::get_pot_E(const Walker& walker) const {
         e_potential += 0.5 * w * w * walker.get_r_i2(i);
     }
 
-    return e_potential;
+    return e_potential + coulomb->get_Coulomb(walker);
 }
 
-double Potential::get_Coulomb(const Walker& walker) const {
+Coulomb::Coulomb(int n_p, int dim){
+    this->n_p = n_p;
+    this->dim = dim;
+}
+
+no_Coulomb::no_Coulomb(int n_p, int dim){
+    
+}
+
+full_Coulomb::full_Coulomb(int n_p, int dim)
+: Coulomb(n_p, dim) {
+    
+}
+
+double full_Coulomb::get_Coulomb(const Walker& walker) const {
     int i, j;
     double e_coulomb;
 
@@ -46,3 +66,4 @@ double Potential::get_Coulomb(const Walker& walker) const {
 
     return e_coulomb;
 }
+
