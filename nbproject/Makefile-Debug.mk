@@ -14,14 +14,14 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc.exe
-CCC=g++.exe
-CXX=g++.exe
+CC=gcc
+CCC=g++
+CXX=g++
 FC=gfortran
-AS=as.exe
+AS=as
 
 # Macros
-CND_PLATFORM=Cygwin-Windows
+CND_PLATFORM=GNU-Linux-x86
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -40,10 +40,11 @@ OBJECTFILES= \
 	${OBJECTDIR}/QMC.o \
 	${OBJECTDIR}/QMCmain.o \
 	${OBJECTDIR}/Kinetics.o \
-	${OBJECTDIR}/DMC_old.o \
+	${OBJECTDIR}/Coulomb.o \
+	${OBJECTDIR}/Sampling.o \
 	${OBJECTDIR}/lib.o \
+	${OBJECTDIR}/Diffusion.o \
 	${OBJECTDIR}/System.o \
-	${OBJECTDIR}/vmc_old.o \
 	${OBJECTDIR}/Jastrow.o
 
 
@@ -65,63 +66,68 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/Orbitals.o: nbproject/Makefile-${CND_CONF}.mk Orbitals.cpp 
+${OBJECTDIR}/Orbitals.o: Orbitals.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals.o Orbitals.cpp
 
-${OBJECTDIR}/Walker.o: nbproject/Makefile-${CND_CONF}.mk Walker.cpp 
+${OBJECTDIR}/Walker.o: Walker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker.o Walker.cpp
 
-${OBJECTDIR}/Potential.o: nbproject/Makefile-${CND_CONF}.mk Potential.cpp 
+${OBJECTDIR}/Potential.o: Potential.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential.o Potential.cpp
 
-${OBJECTDIR}/QMC.o: nbproject/Makefile-${CND_CONF}.mk QMC.cpp 
+${OBJECTDIR}/QMC.o: QMC.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC.o QMC.cpp
 
-${OBJECTDIR}/QMCmain.o: nbproject/Makefile-${CND_CONF}.mk QMCmain.cpp 
+${OBJECTDIR}/QMCmain.o: QMCmain.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain.o QMCmain.cpp
 
-${OBJECTDIR}/Kinetics.o: nbproject/Makefile-${CND_CONF}.mk Kinetics.cpp 
+${OBJECTDIR}/Kinetics.o: Kinetics.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics.o Kinetics.cpp
 
-${OBJECTDIR}/DMC_old.o: nbproject/Makefile-${CND_CONF}.mk DMC_old.cpp 
+${OBJECTDIR}/Coulomb.o: Coulomb.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/DMC_old.o DMC_old.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb.o Coulomb.cpp
 
-${OBJECTDIR}/lib.o: nbproject/Makefile-${CND_CONF}.mk lib.cpp 
+${OBJECTDIR}/Sampling.o: Sampling.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling.o Sampling.cpp
+
+${OBJECTDIR}/lib.o: lib.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib.o lib.cpp
 
-${OBJECTDIR}/System.o: nbproject/Makefile-${CND_CONF}.mk System.cpp 
+${OBJECTDIR}/Diffusion.o: Diffusion.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion.o Diffusion.cpp
+
+${OBJECTDIR}/System.o: System.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/System.o System.cpp
 
-${OBJECTDIR}/vmc_old.o: nbproject/Makefile-${CND_CONF}.mk vmc_old.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/vmc_old.o vmc_old.cpp
-
-${OBJECTDIR}/Jastrow.o: nbproject/Makefile-${CND_CONF}.mk Jastrow.cpp 
+${OBJECTDIR}/Jastrow.o: Jastrow.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow.o Jastrow.cpp
@@ -132,7 +138,7 @@ ${OBJECTDIR}/Jastrow.o: nbproject/Makefile-${CND_CONF}.mk Jastrow.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc
 
 # Subprojects
 .clean-subprojects:

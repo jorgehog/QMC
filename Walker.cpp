@@ -5,6 +5,8 @@
  * Created on 30. mars 2012, 16:50
  */
 
+#include <math.h>
+
 #include "Walker.h"
 
 Walker::Walker(int n_p, int dim) {

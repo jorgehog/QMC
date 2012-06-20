@@ -5,32 +5,35 @@
  * Created on 13. april 2012, 22:33
  */
 
-#include "Orbitals.h"
+#include <iostream>
+#include <math.h>
 
-using namespace std;
+#include "Orbitals.h"
 
 //ferdig
 
-Orbitals::Orbitals(){
-    
-}
-
-oscillator_basis_HC::oscillator_basis_HC(int n_p, int dim, double alpha = 1.0){
+Orbitals::Orbitals(int n_p, int dim) {
     this->n_p = n_p;
     this->dim = dim;
-    this->alpha = alpha;
 }
-void oscillator_basis_HC::set_frequency(double w){
+
+oscillator_basis_HC::oscillator_basis_HC(int n_p, int dim, double alpha, double w)
+: Orbitals(n_p, dim) {
+
+    this->alpha = alpha;
     this->w = w;
 }
 
+//void oscillator_basis_HC::set_frequency(double w){
+//    this->w = w;
+//}
 
-double oscillator_basis_HC::phi(const Walker& walker, int particle, int q_num){
+double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) {
     double r2, H, x, y;
-    
-    r2 = walker.get_r_i2(particle);
-    x = walker.r[particle][0];
-    y = walker.r[particle][1];
+
+    r2 = walker->get_r_i2(particle);
+    x = walker->r[particle][0];
+    y = walker->r[particle][1];
 
 
     if (q_num == 0) {
@@ -64,24 +67,24 @@ double oscillator_basis_HC::phi(const Walker& walker, int particle, int q_num){
     } else if (q_num == 14) {
         H = 4 * (2 * x * x - 1)*(2 * y * y - 1);
     } else {
-        cout << "Mismatching quantum number: " << q_num << endl;
+        std::cout << "Mismatching quantum number: " << q_num << std::endl;
     }
 
     return H * exp(-0.5 * alpha * w * r2);
 }
 
-double oscillator_basis_HC::del_phi(const Walker& walker, int particle, int q_num, int d){
+double oscillator_basis_HC::del_phi(const Walker* walker, int particle, int q_num, int d) {
     double r2, H, x, y;
 
-    r2 = walker.get_r_i2(particle);
+    r2 = walker->get_r_i2(particle);
 
-    x = walker.r[particle][0];
-    y = walker.r[particle][1];
+    x = walker->r[particle][0];
+    y = walker->r[particle][1];
 
 
     //Hermite polynomials (up to 4)
     if (q_num == 0) {
-        H = -w * alpha * walker.r[particle][d];
+        H = -w * alpha * walker->r[particle][d];
     } else if (q_num == 1) {
         if (d == 0) {
             H = 2 * (1 - alpha * w * x * x);
@@ -168,18 +171,18 @@ double oscillator_basis_HC::del_phi(const Walker& walker, int particle, int q_nu
             H = -4 * y * (2 * x * x - 1)*(alpha * w * (2 * y * y - 1) - 4);
         }
     } else {
-        cout << "Mismatching quantum number: " << q_num << endl;
+        std::cout << "Mismatching quantum number: " << q_num << std::endl;
     }
 
     return H * exp(-0.5 * alpha * w * r2);
 }
 
-double oscillator_basis_HC::lapl_phi(const Walker& walker, int particle, int q_num) const{
+double oscillator_basis_HC::lapl_phi(const Walker* walker, int particle, int q_num) const {
     double r2, H, x, y, aw2;
 
-    r2 = walker.get_r_i2(particle);
-    x = walker.r[particle][0];
-    y = walker.r[particle][1];
+    r2 = walker->get_r_i2(particle);
+    x = walker->r[particle][0];
+    y = walker->r[particle][1];
     aw2 = alpha * alpha * w * w;
 
 
@@ -215,7 +218,7 @@ double oscillator_basis_HC::lapl_phi(const Walker& walker, int particle, int q_n
     } else if (q_num == 14) {
         H = 4 * (aw2 * r2 * (4 * x * x * y * y + 1 + 2 * r2) - 2 * alpha * w * (1 + 6 * r2 + 20 * x * x * y * y) + 8 * (r2 + 1));
     } else {
-        cout << "Mismatching quantum number: " << q_num << endl;
+        std::cout << "Mismatching quantum number: " << q_num << std::endl;
     }
 
     return H * exp(-0.5 * alpha * w * r2);

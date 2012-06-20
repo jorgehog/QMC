@@ -8,7 +8,8 @@
 #ifndef ORBITALS_H
 #define	ORBITALS_H
 
-class Walker;
+#include "Walker.h"
+
 class Orbitals {
 protected:
     int n_p;
@@ -16,26 +17,26 @@ protected:
     int dim;
   
 public:
-    Orbitals();
-    virtual double phi(const Walker &walker, int particle, int q_num) = 0;
-    virtual double del_phi(const Walker &walker, int particle, int q_num, int d) = 0;
-    virtual double lapl_phi(const Walker &walker, int particle, int q_num) const = 0;
+    Orbitals(int n_p, int dim);
+    virtual double phi(const Walker* walker, int particle, int q_num) = 0;
+    virtual double del_phi(const Walker* walker, int particle, int q_num, int d) = 0;
+    virtual double lapl_phi(const Walker* walker, int particle, int q_num) const = 0;
 
 };
 
-class oscillator_basis_HC : private Orbitals {
+class oscillator_basis_HC : public Orbitals {
 private:
     double alpha;
     double w;
     
 public:
-    oscillator_basis_HC(int n_p, int dim, double alpha);
+    oscillator_basis_HC(int n_p, int dim, double alpha, double w = 1.0);
     
-    void set_frequency(double w);
+    //void set_frequency(double w);
     
-    virtual double phi(const Walker &walker, int particle, int q_num);
-    virtual double del_phi(const Walker &walker, int particle, int q_num, int d);
-    virtual double lapl_phi(const Walker &walker, int particle, int q_num) const;
+    virtual double phi(const Walker* walker, int particle, int q_num);
+    virtual double del_phi(const Walker* walker, int particle, int q_num, int d);
+    virtual double lapl_phi(const Walker* walker, int particle, int q_num) const;
 };
 
 

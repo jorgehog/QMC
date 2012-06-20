@@ -41,3 +41,5 @@ public:
     bool is_singular();
 
 };
+
+#endif	/* WALKER_H */

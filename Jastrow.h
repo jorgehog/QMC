@@ -8,6 +8,8 @@
 #ifndef JASTROW_H
 #define	JASTROW_H
 
+#include "Walker.h"
+
 class Jastrow {
 protected:
     int n_p;
@@ -16,40 +18,40 @@ protected:
 
 
 public:
+    Jastrow(int n_p, int dim);
     Jastrow();
 
     virtual void initialize() = 0;
 
-    virtual double get_val(Walker &walker) = 0;
-    virtual double get_j_ratio(Walker &walker_new, Walker &walker_old, int i) = 0;
-    virtual void get_grad(Walker &walker) = 0;
-    //void get_grad(Walker &walker); In walker
-    virtual double get_lapl_sum(const Walker &walker) const = 0;
+    virtual double get_val(Walker* walker) = 0;
+    virtual double get_j_ratio(Walker* walker_new, Walker* walker_old, int i) = 0;
+    virtual void get_grad(Walker* walker) = 0;
+    //void get_grad(Walker* walker); In walker
+    virtual double get_lapl_sum(const Walker* walker) const = 0;
 
 };
 
 class No_Jastrow : public Jastrow {
 public:
 
-    No_Jastrow() {
-    };
+    No_Jastrow();
 
-    virtual void get_grad(Walker &walker) {
-        return 0;
+    virtual void get_grad(Walker* walker) {
+        
     };
 
     virtual void initialize() {
     };
 
-    virtual double get_j_ratio(Wavefunction &wf_new, Wavefunction &wf_old, int i) {
+    virtual double get_j_ratio(Walker* walker_post, Walker* walker_pre, int i) {
         return 1;
     };
 
-    virtual double get_val(Wavefunction &wf) {
+    virtual double get_val(Walker* walker) {
         return 1;
     };
 
-    virtual double get_lapl_sum(const Wavefunction &wf) const {
+    virtual double get_lapl_sum(const Walker* walker) const {
         return 0;
     };
 };
@@ -61,15 +63,15 @@ protected:
 
 public:
 
-    Pade_Jastrow(const VMC &vmc, double BETA);
+    Pade_Jastrow(int n_p, int dim, double beta);
 
     virtual void initialize();
 
-    virtual void get_grad(Walker &walker);
+    virtual void get_grad(Walker* walker);
 
-    virtual double get_j_ratio(Wavefunction &wf_new, Wavefunction &wf_old, int i);
-    virtual double get_val(Wavefunction &wf);
-    virtual double get_lapl_sum(const Wavefunction &wf) const;
+    virtual double get_j_ratio(Walker* walker_new, Walker* walker_old, int i);
+    virtual double get_val(Walker* walker);
+    virtual double get_lapl_sum(const Walker* walker) const;
 
 };
 

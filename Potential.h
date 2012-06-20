@@ -8,11 +8,14 @@
 #ifndef POTENTIAL_H
 #define	POTENTIAL_H
 
+#include "Walker.h"
+#include "Coulomb.h"
+
 class Potential {
 public:
-    Potential();
+    Potential(int n_p, int dim, bool coulomb_on);
 
-    virtual double get_pot_E(const Walker &walker) const = 0;
+    virtual double get_pot_E(const Walker* walker) const = 0;
 
 
 
@@ -30,39 +33,13 @@ protected:
 
 public:
 
-    Harmonic_osc(int n_p, int dim, double W, bool coulomb_on);
+    Harmonic_osc(int n_p, int dim, double W, bool coulomb_on = true);
 
-    virtual double get_pot_E(const Walker& walker) const;
-
-};
-
-class Coulomb {
-public:
-    int n_p;
-    int dim;
-
-    Coulomb(int n_p, int dim);
-    virtual double get_Coulomb(const Walker &walker) const = 0;
+    virtual double get_pot_E(const Walker* walker) const;
 
 };
 
-class no_Coulomb : public Coulomb {
-public:
-    no_Coulomb(int n_p, int dim);
 
-    double get_Coulomb(const Walker &walker) const {
-        return 0;
-    }
-
-
-};
-
-class full_Coulomb : public Coulomb {
-public:
-    full_Coulomb(int n_p, int dim);
-
-    double get_Coulomb(const Walker &walker) const;
-};
 
 #endif	/* POTENTIAL_H */
 

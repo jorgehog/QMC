@@ -5,29 +5,32 @@
  * Created on 30. mars 2012, 16:52
  */
 
-#include <stdio.h> 
+#include <iostream> 
 
 #include "Jastrow.h"
-#include "Walker.h"
+#include "Sampling.h"
+#include "math.h"
 
 
-using namespace std;
+Jastrow::Jastrow(int n_p, int dim) {
+    this->n_p = n_p;
+    this->n2 = n_p / 2;
+    this->dim = dim;
+}
 
-Jastrow::Jastrow() {
-
+Jastrow::Jastrow(){
+    
 }
 
 No_Jastrow::No_Jastrow() {
 
 }
 
-Pade_Jastrow::Pade_Jastrow(int n_p, int dim, double beta) {
-    this->n_p = n_p;
-    this->n2 = n_p / 2;
-    this->dim = dim;
+Pade_Jastrow::Pade_Jastrow(int n_p, int dim, double beta)
+: Jastrow(n_p, dim) {
+
     this->beta = beta;
 }
-
 
 void Pade_Jastrow::initialize() {
     int i, j;
@@ -40,7 +43,7 @@ void Pade_Jastrow::initialize() {
         a_sym = 1. / 4;
         a_asym = 1. / 2;
     } else {
-        cout << "Unable to initialize Jastrow paremters: Unknown dimension" << endl;
+        std::cout << "Unable to initialize Jastrow paremters: Unknown dimension" << std::endl;
         exit(1);
     }
 
@@ -56,20 +59,20 @@ void Pade_Jastrow::initialize() {
     }
 }
 
-double Pade_Jastrow::get_val(Walker& walker) {
+double Pade_Jastrow::get_val(Walker* walker) {
     int i, j;
     double arg;
 
     for (i = 0; i < n_p - 1; i++) {
         for (j = i + 1; j < n_p; j++) {
-            arg += a[i][j] * walker.r_rel[i][j] / (1.0 + beta * walker.r_rel[i][j]);
+            arg += a[i][j] * walker->r_rel[i][j] / (1.0 + beta * walker->r_rel[i][j]);
         }
     }
 
     return exp(arg);
 }
 
-void Pade_Jastrow::get_grad(Walker& walker) {
+void Pade_Jastrow::get_grad(Walker* walker) {
     int i, j, k;
     double b_ij, deriv;
 
@@ -77,35 +80,35 @@ void Pade_Jastrow::get_grad(Walker& walker) {
         for (k = 0; k < dim; k++) {
             deriv = 0;
             for (j = 0; j < i; j++) {
-                b_ij = 1.0 + beta * walker.r_rel[i][j];
-                deriv += a[i][j] * (walker.r[i][k] - walker.r[j][k]) / (walker.r_rel[i][j] * b_ij * b_ij);
+                b_ij = 1.0 + beta * walker->r_rel[i][j];
+                deriv += a[i][j] * (walker->r[i][k] - walker->r[j][k]) / (walker->r_rel[i][j] * b_ij * b_ij);
             }
             for (j = i + 1; j < n_p; j++) {
-                b_ij = 1.0 + beta * walker.r_rel[i][j];
-                deriv += a[i][j] * (walker.r[i][k] - walker.r[j][k]) / (walker.r_rel[i][j] * b_ij * b_ij);
+                b_ij = 1.0 + beta * walker->r_rel[i][j];
+                deriv += a[i][j] * (walker->r[i][k] - walker->r[j][k]) / (walker->r_rel[i][j] * b_ij * b_ij);
             }
-            
-            walker.jast_grad[i][k] = deriv;
+
+            walker->jast_grad[i][k] = deriv;
         }
     }
 
 }
 
-double Pade_Jastrow::get_j_ratio(Walker& walker_new, Walker& walker_old, int i) {
+double Pade_Jastrow::get_j_ratio(Walker* walker_new, Walker* walker_old, int i) {
     int j;
     double j_ratio;
 
     j_ratio = 0;
     for (j = 0; j < n_p; j++) {
-        j_ratio += a[i][j] * (walker_new.r_rel[i][j] / (1.0 + beta * walker_new.r_rel[i][j]) -
-                walker_old.r_rel[i][j] / (1.0 + beta * walker_old.r_rel[i][j]));
+        j_ratio += a[i][j] * (walker_new->r_rel[i][j] / (1.0 + beta * walker_new->r_rel[i][j]) -
+                walker_old->r_rel[i][j] / (1.0 + beta * walker_old->r_rel[i][j]));
     }
 
 
     return exp(j_ratio);
 }
 
-double Pade_Jastrow::get_lapl_sum(const Walker& walker) const {
+double Pade_Jastrow::get_lapl_sum(const Walker* walker) const {
     int k, j, d;
     double sum1, sum2, b_kj;
 
@@ -113,12 +116,12 @@ double Pade_Jastrow::get_lapl_sum(const Walker& walker) const {
 
     for (k = 0; k < n_p; k++) {
         for (j = k + 1; j < n_p; j++) {
-            b_kj = 1 + beta * walker.r_rel[k][j];
-            sum2 += a[k][j] * (1 - beta * walker.r_rel[k][j]) / (walker.r_rel[k][j] * b_kj * b_kj * b_kj);
+            b_kj = 1 + beta * walker->r_rel[k][j];
+            sum2 += a[k][j] * (1 - beta * walker->r_rel[k][j]) / (walker->r_rel[k][j] * b_kj * b_kj * b_kj);
         }
 
         for (d = 0; d < dim; d++) {
-            sum1 += walker.jast_grad[k][d] * walker.jast_grad[k][d];
+            sum1 += walker->jast_grad[k][d] * walker->jast_grad[k][d];
         }
     }
 

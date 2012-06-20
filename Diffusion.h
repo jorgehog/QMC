@@ -25,41 +25,35 @@ protected:
 
 
 public:
-    Diffusion(int n_p, int dim, double timestep, double random_seed, double D);
+    Diffusion(int n_p, int dim, double timestep, long random_seed, double D);
 
-    virtual void set_trial_pos(Walker &walker, bool load_VMC_dist = false, std::ifstream* file = NULL);
-    virtual double get_new_pos(Walker &walker) = 0;
-    virtual void get_new_values() = 0;
-    virtual void update_walker() = 0;
-    virtual double get_g_ratio(Walker& walker_post, Walker& walker_pre, int particle) = 0;
-
+    virtual double get_new_pos(Walker* walker, int i, int j);
+    
+    virtual double get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle) = 0;
+    
+    double call_RNG();
 };
 
 class Fokker_Planck : public Diffusion {
 public:
-    Fokker_Planck();
+    Fokker_Planck(int n_p, int dim, double timestep, long random_seed, double D = 0.5);
 
-    virtual void set_trial_pos();
-    virtual double get_new_pos();
-    virtual void get_new_values();
-    virtual void update_walker();
-    virtual double get_g_ratio(Walker& walker_post, Walker& walker_pre, int particle);
+    virtual double get_new_pos(Walker* walker, int i, int j);
+    virtual double get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle);
 
 protected:
-    double test_qforce(Walker &walker);
+    double test_qforce(Walker* walker);
 
 
 };
 
 class Simple : public Diffusion {
 public:
-    Simple(int n_p, int dim, double timestep, double random_seed, double D = 0.5);
+    Simple(int n_p, int dim, double timestep,long random_seed, double D = 0.5);
 
 
-    virtual double get_new_pos(Walker &walker);
-    virtual void get_new_values();
-    virtual void update_walker();
-    virtual double get_g_ratio(Walker& walker_post, Walker& walker_pre, int particle);
+    virtual double get_new_pos(Walker* walker, int i, int j);
+    virtual double get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle);
 
 
 };

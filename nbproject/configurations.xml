@@ -10,11 +10,14 @@
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
         <itemPath>vmc_old.h</itemPath>
       </logicalFolder>
+      <itemPath>Coulomb.h</itemPath>
+      <itemPath>Diffusion.h</itemPath>
       <itemPath>Jastrow.h</itemPath>
       <itemPath>Kinetics.h</itemPath>
       <itemPath>Orbitals.h</itemPath>
       <itemPath>Potential.h</itemPath>
       <itemPath>QMC.h</itemPath>
+      <itemPath>Sampling.h</itemPath>
       <itemPath>System.h</itemPath>
       <itemPath>Walker.h</itemPath>
       <itemPath>lib.h</itemPath>
@@ -23,16 +26,17 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="DMC" projectFiles="true">
-        <itemPath>DMC_old.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="VMC" projectFiles="true">
-        <itemPath>vmc_old.cpp</itemPath>
       </logicalFolder>
+      <itemPath>Coulomb.cpp</itemPath>
+      <itemPath>Diffusion.cpp</itemPath>
       <itemPath>Jastrow.cpp</itemPath>
       <itemPath>Kinetics.cpp</itemPath>
       <itemPath>Orbitals.cpp</itemPath>
       <itemPath>Potential.cpp</itemPath>
       <itemPath>QMC.cpp</itemPath>
+      <itemPath>Sampling.cpp</itemPath>
       <itemPath>System.cpp</itemPath>
       <itemPath>Walker.cpp</itemPath>
       <itemPath>lib.cpp</itemPath>
@@ -59,9 +63,12 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <commandlineTool>g++</commandlineTool>
+        </ccTool>
       </compileType>
     </conf>
     <conf name="Release" type="1">

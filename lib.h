@@ -6,6 +6,8 @@
 
      // Standard ANSI-C++ include files 
 
+#ifndef LIB_H
+#define	LIB_H
 
 #include <iostream>
 #include <new>
@@ -69,6 +71,7 @@ double ran0(long *);
 double ran1(long *);
 double ran2(long *);
 double ran3(long *);
+double gaussian_deviate(long *);
 
 
-
+#endif	/* LIB_H */
