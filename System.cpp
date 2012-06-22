@@ -26,6 +26,8 @@ double System::get_potential_energy(Walker* walker) {
 Fermions::Fermions(int n_p, int dim, Potential* pot, Orbitals* orbital)
 : System(n_p, dim, pot, orbital) {
 
+    n2 = n_p/2;
+    
     s_up = (double **) matrix(n_p / 2, n_p / 2, sizeof (double));
     s_down = (double **) matrix(n_p / 2, n_p / 2, sizeof (double));
 

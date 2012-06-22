@@ -5,6 +5,9 @@
  * Created on 13. april 2012, 17:45
  */
 
+#include <iostream>
+using namespace std;
+
 #include "Kinetics.h"
 #include "System.h"
 #include "QMC.h"
@@ -33,7 +36,7 @@ double Numerical::get_KE(Walker* walker) {
 
     //kinetic energy:
 
-    wf = walker->value;
+    wf = walker->value; //BUG: ALLTID DEN SAMME
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
@@ -57,6 +60,8 @@ double Numerical::get_KE(Walker* walker) {
             wf_min = wfminus->value;
             wf_plus = wfplus->value;
 
+            //cout << "SMALL " << wf_min + wf_plus - 2 * wf << endl;
+            
             e_kinetic -= (wf_min + wf_plus - 2 * wf);
             wfplus->r[i][j] = walker->r[i][j];
             wfminus->r[i][j] = walker->r[i][j];

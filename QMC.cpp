@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-QMC::QMC(int n_p, int dim, int n_c,  Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics) {
+QMC::QMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics) {
     this->n_p = n_p;
     this->dim = dim;
     this->n_c = n_c;
@@ -85,7 +85,7 @@ double QMC::get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int pa
     double spatial = sampling->get_spatial_ratio(walker_post, walker_pre, particle);
     double jast = jastrow->get_j_ratio(walker_post, walker_pre, particle);
     double G = sampling->get_g_ratio(walker_post, walker_pre, particle);
-
+   
     return spatial * spatial * jast*G;
 }
 
@@ -109,75 +109,88 @@ bool QMC::metropolis_test(double A) {
     }
 }
 
-void QMC::update_walker(Walker* walker_pre, Walker* walker_post, int particle){
+void QMC::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     sampling->update_walker(walker_pre, walker_post, particle);
 }
 
-void QMC::copy_walker(Walker* parent, Walker* child){
-    for (int i = 0; i < n_p; i++){
-        for (int j = 0; j < dim; j++){
+void QMC::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+    for (int i = 0; i < dim; i++) {
+        walker_post->r[particle][i] = walker_pre->r[particle][i];
+    }
+
+    for (int i = 0; i < n_p; i++) {
+        walker_post->r_rel[i][particle] = walker_post->r_rel[particle][i] = walker_pre->r_rel[i][particle];
+    }
+}
+
+void QMC::copy_walker(Walker* parent, Walker* child) {
+    for (int i = 0; i < n_p; i++) {
+        for (int j = 0; j < dim; j++) {
             child->r[i][j] = parent->r[i][j];
         }
-        
-        for (int k = i + 1; k < n_p - 1; k++){
+
+        for (int k = i + 1; k < n_p - 1; k++) {
             child->r_rel[i][k] = child->r_rel[k][i] = parent->r_rel[i][k];
         }
     }
-    
+
     sampling->copy_walker(parent, child);
-    
-    
+
+
 }
 
-VMC::VMC(int n_p, int dim, int n_c,  Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics, bool dist_to_file)
-: QMC(n_p, dim, n_c,  jastrow, sampling, system, kinetics) {
+VMC::VMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics, bool dist_to_file)
+: QMC(n_p, dim, n_c, jastrow, sampling, system, kinetics) {
 
     vmc_E = 0;
     E2 = 0;
-    
+
     wfold = new Walker(n_p, dim);
     wfnew = new Walker(n_p, dim);
-    
+
     this->dist_to_file = dist_to_file;
 }
 
 void VMC::initialize() {
     jastrow->initialize();
     sampling->set_trial_pos(wfold);
-    sampling->get_necessities(wfold);
     copy_walker(wfold, wfnew);
 }
 
 void VMC::calculate_energy(Walker* walker) {
     double local_E;
-    
-    local_E = kinetics->get_KE(walker);
+
+    local_E = kinetics->get_KE(walker); //diverges
     local_E += system->get_potential_energy(walker);
     vmc_E += local_E;
     E2 += local_E*local_E;
-
 }
 
-void VMC::scale_values(){
-    vmc_E/=n_c;
-    E2/=n_c;
+void VMC::scale_values() {
+    vmc_E /= n_c;
+    E2 /= n_c;
 }
 
 void VMC::run_method() {
 
     initialize();
-
+   
+    
     for (int cycle = 0; cycle < n_c; cycle++) {
         for (int particle = 0; particle < n_p; particle++) {
             update_pos(wfold, wfnew, particle);
             update_necessities(wfold, wfnew, particle);
+//            cout << "oldval" <<wfold->value << endl;
+//            cout << "newval "<<wfnew->value << endl;
 
             double A = get_acceptance_ratio(wfold, wfnew, particle);
-
+     
             if (metropolis_test(A)) {
+//                cout << "accepted" << endl;
                 update_walker(wfold, wfnew, particle);
             } else {
-                //reset_walker(wf_old) NEED TO RESET SOMETHING IF SWITCH SPIN?
+//                cout << "rejected" << endl;
+                reset_walker(wfold, wfnew, particle);
             }
         }
 
@@ -190,8 +203,16 @@ void VMC::run_method() {
 
 }
 
-void VMC::output(){
+void VMC::output() {
     std::cout << "VMC energy: " << vmc_E << std::endl;
-    std::cout << "VMC variance: " << E2 << std::endl;
+    std::cout << "VMC variance: " << E2 - vmc_E*vmc_E << std::endl;
+    std::cout << "Acceptance ratio: " << accepted/(double)(n_c*n_p) << endl;
 }
 
+double VMC::get_var(){
+    return E2 - vmc_E*vmc_E;
+}
+
+double VMC::get_energy(){
+    return vmc_E;
+}

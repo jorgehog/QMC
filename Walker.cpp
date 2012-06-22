@@ -8,10 +8,26 @@
 #include <math.h>
 
 #include "Walker.h"
+#include "lib.h"
 
 Walker::Walker(int n_p, int dim) {
     this->dim = dim;
     this->n_p = n_p;
+    this->n2 = n_p/2;
+    
+    
+    
+    //need memory optimization for BF? Nah..
+    r = new_matrix(n_p, dim);
+    r_rel = new_matrix(n_p, n_p);
+    qforce = new_matrix(n_p, dim);
+    inv = new_matrix(n_p, n2);
+    jast_grad = new_matrix(n_p, dim);
+    spatial_grad = new_matrix(n_p, dim);
+    value = 0;
+    lapl_sum = 0;
+    ratio = 0;
+    
 }
 
 double Walker::abs_relative(int i, int j) {

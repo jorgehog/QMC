@@ -6,6 +6,8 @@
  */
 
 #include "Sampling.h"
+#include <iostream>
+using namespace std;
 
 Sampling::Sampling(int n_p, int dim) {
     this->n_p = n_p;
@@ -63,7 +65,7 @@ Brute_Force::Brute_Force(int n_p, int dim, double timestep, long random_seed, do
 
 void Brute_Force::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     this->Sampling::update_walker(walker_pre, walker_post, particle);
-    walker_post->value = walker_pre->value;
+    walker_pre->value = walker_post->value;
 }
 
 void Brute_Force::get_necessities(Walker* walker) {
@@ -76,7 +78,7 @@ void Brute_Force::get_necessities(Walker* walker) {
 }
 
 void Brute_Force::update_necessities(Walker* walker_pre, Walker* walker_post, int particle) {
-    //no necessities
+    qmc->get_wf_value(walker_post);
 }
 
 void Brute_Force::calculate_energy_necessities(Walker* walker) {
@@ -84,8 +86,6 @@ void Brute_Force::calculate_energy_necessities(Walker* walker) {
 }
 
 double Brute_Force::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
-    qmc->get_wf_value(walker_post);
-
     return walker_post->value / walker_pre->value;
 }
 

@@ -45,10 +45,11 @@ protected:
     void update_necessities(Walker* walker_pre, Walker* walker_post, int particle);
     double get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int particle);
 
-    void calculate_energy_necessities(Walker*walker);
+    void calculate_energy_necessities(Walker* walker);
 
     bool metropolis_test(double A);
-    void update_walker(Walker*walker_pre, Walker*walker_post, int particle);
+    void update_walker(Walker*walker_pre, Walker* walker_post, int particle);
+    void reset_walker(Walker* walker_pre, Walker* walker_post, int particle);
 
     void copy_walker(Walker* parent, Walker* child);
 
@@ -93,6 +94,9 @@ public:
     Walker* wfold;
     Walker* wfnew;
 
+    double get_var();
+    double get_energy();
+    
     virtual void run_method();
     virtual void output();
 

@@ -10,6 +10,7 @@
 #include "Jastrow.h"
 #include "Sampling.h"
 #include "math.h"
+#include "lib.h"
 
 
 Jastrow::Jastrow(int n_p, int dim) {
@@ -30,6 +31,8 @@ Pade_Jastrow::Pade_Jastrow(int n_p, int dim, double beta)
 : Jastrow(n_p, dim) {
 
     this->beta = beta;
+    
+    a = (double **) matrix(n_p, n_p, sizeof(double));
 }
 
 void Pade_Jastrow::initialize() {

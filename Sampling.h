@@ -31,7 +31,7 @@ public:
     void set_trial_pos(Walker* walker, bool load_VMC_dist = false, std::ifstream* file = NULL);
     double get_new_pos(Walker* walker_pre, int i, int j);
 
-    void update_walker(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void update_walker(Walker* walker_pre, Walker* walker_post, int particle);
     virtual double get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) = 0;
     virtual double get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle);
     virtual void get_necessities(Walker* walker) = 0;
@@ -57,7 +57,7 @@ class Importance : public Sampling {
 public:
     Importance(int n_p, int dim, double timestep, long random_seed, double D = 0.5);
 
-    virtual void update_walker(Walker* walker_pre, Walker* walker_post, int particle);
+    void update_walker(Walker* walker_pre, Walker* walker_post, int particle);
 
     virtual void get_necessities(Walker* walker);
     virtual void update_necessities(Walker* walker_pre, Walker* walker_post, int particle);

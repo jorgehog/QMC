@@ -73,5 +73,8 @@ double ran2(long *);
 double ran3(long *);
 double gaussian_deviate(long *);
 
+inline double ** new_matrix(int nx, int ny){
+    return (double **) matrix(nx, ny, sizeof(double));
+}
 
 #endif	/* LIB_H */

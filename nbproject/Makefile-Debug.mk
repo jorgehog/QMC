@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Walker.o \
 	${OBJECTDIR}/Potential.o \
 	${OBJECTDIR}/QMC.o \
+	${OBJECTDIR}/QMCInitializer.o \
 	${OBJECTDIR}/QMCmain.o \
 	${OBJECTDIR}/Kinetics.o \
 	${OBJECTDIR}/Coulomb.o \
@@ -47,6 +48,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/System.o \
 	${OBJECTDIR}/Jastrow.o
 
+# Test Directory
+TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
+
+# Test Files
+TESTFILES= \
+	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
 CFLAGS=
@@ -92,6 +99,11 @@ ${OBJECTDIR}/QMC.o: QMC.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC.o QMC.cpp
 
+${OBJECTDIR}/QMCInitializer.o: QMCInitializer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer.o QMCInitializer.cpp
+
 ${OBJECTDIR}/QMCmain.o: QMCmain.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -134,6 +146,197 @@ ${OBJECTDIR}/Jastrow.o: Jastrow.cpp
 
 # Subprojects
 .build-subprojects:
+
+# Build Test Targets
+.build-tests-conf: .build-conf ${TESTFILES}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/VMCtest.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+
+
+${TESTDIR}/tests/VMCtest.o: tests/VMCtest.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} $@.d
+	$(COMPILE.cc) -g -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/VMCtest.o tests/VMCtest.cpp
+
+
+${OBJECTDIR}/Orbitals_nomain.o: ${OBJECTDIR}/Orbitals.o Orbitals.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Orbitals.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals_nomain.o Orbitals.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Orbitals.o ${OBJECTDIR}/Orbitals_nomain.o;\
+	fi
+
+${OBJECTDIR}/Walker_nomain.o: ${OBJECTDIR}/Walker.o Walker.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Walker.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker_nomain.o Walker.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Walker.o ${OBJECTDIR}/Walker_nomain.o;\
+	fi
+
+${OBJECTDIR}/Potential_nomain.o: ${OBJECTDIR}/Potential.o Potential.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Potential.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential_nomain.o Potential.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Potential.o ${OBJECTDIR}/Potential_nomain.o;\
+	fi
+
+${OBJECTDIR}/QMC_nomain.o: ${OBJECTDIR}/QMC.o QMC.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/QMC.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC_nomain.o QMC.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/QMC.o ${OBJECTDIR}/QMC_nomain.o;\
+	fi
+
+${OBJECTDIR}/QMCInitializer_nomain.o: ${OBJECTDIR}/QMCInitializer.o QMCInitializer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/QMCInitializer.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer_nomain.o QMCInitializer.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/QMCInitializer.o ${OBJECTDIR}/QMCInitializer_nomain.o;\
+	fi
+
+${OBJECTDIR}/QMCmain_nomain.o: ${OBJECTDIR}/QMCmain.o QMCmain.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/QMCmain.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain_nomain.o QMCmain.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/QMCmain.o ${OBJECTDIR}/QMCmain_nomain.o;\
+	fi
+
+${OBJECTDIR}/Kinetics_nomain.o: ${OBJECTDIR}/Kinetics.o Kinetics.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Kinetics.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics_nomain.o Kinetics.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Kinetics.o ${OBJECTDIR}/Kinetics_nomain.o;\
+	fi
+
+${OBJECTDIR}/Coulomb_nomain.o: ${OBJECTDIR}/Coulomb.o Coulomb.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Coulomb.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb_nomain.o Coulomb.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Coulomb.o ${OBJECTDIR}/Coulomb_nomain.o;\
+	fi
+
+${OBJECTDIR}/Sampling_nomain.o: ${OBJECTDIR}/Sampling.o Sampling.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Sampling.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling_nomain.o Sampling.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Sampling.o ${OBJECTDIR}/Sampling_nomain.o;\
+	fi
+
+${OBJECTDIR}/lib_nomain.o: ${OBJECTDIR}/lib.o lib.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/lib.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib_nomain.o lib.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/lib.o ${OBJECTDIR}/lib_nomain.o;\
+	fi
+
+${OBJECTDIR}/Diffusion_nomain.o: ${OBJECTDIR}/Diffusion.o Diffusion.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Diffusion.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion_nomain.o Diffusion.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Diffusion.o ${OBJECTDIR}/Diffusion_nomain.o;\
+	fi
+
+${OBJECTDIR}/System_nomain.o: ${OBJECTDIR}/System.o System.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/System.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/System_nomain.o System.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/System.o ${OBJECTDIR}/System_nomain.o;\
+	fi
+
+${OBJECTDIR}/Jastrow_nomain.o: ${OBJECTDIR}/Jastrow.o Jastrow.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Jastrow.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow_nomain.o Jastrow.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Jastrow.o ${OBJECTDIR}/Jastrow_nomain.o;\
+	fi
+
+# Run Test Targets
+.test-conf:
+	@if [ "${TEST}" = "" ]; \
+	then  \
+	    ${TESTDIR}/TestFiles/f1 || true; \
+	else  \
+	    ./${TEST} || true; \
+	fi
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}

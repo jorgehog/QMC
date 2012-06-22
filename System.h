@@ -36,7 +36,7 @@ public:
     virtual double get_spatial_wf(const Walker* walker) = 0;
     virtual void get_spatial_grad(Walker* walker, int particle) = 0;
     virtual double get_spatial_lapl_sum(const Walker* walker_new, const Walker* walker_old) = 0;
-    virtual void initialize(Walker* walker);
+    virtual void initialize(Walker* walker) = 0;
 
     virtual void copy_walker(Walker* parent, Walker* child) = 0;
 };

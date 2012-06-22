@@ -4,12 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="f2" displayName="DMC" projectFiles="true">
-        <itemPath>DMC_old.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f1" displayName="VMC" projectFiles="true">
-        <itemPath>vmc_old.h</itemPath>
-      </logicalFolder>
       <itemPath>Coulomb.h</itemPath>
       <itemPath>Diffusion.h</itemPath>
       <itemPath>Jastrow.h</itemPath>
@@ -17,6 +11,7 @@
       <itemPath>Orbitals.h</itemPath>
       <itemPath>Potential.h</itemPath>
       <itemPath>QMC.h</itemPath>
+      <itemPath>QMCInitializer.h</itemPath>
       <itemPath>Sampling.h</itemPath>
       <itemPath>System.h</itemPath>
       <itemPath>Walker.h</itemPath>
@@ -25,10 +20,6 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <logicalFolder name="f2" displayName="DMC" projectFiles="true">
-      </logicalFolder>
-      <logicalFolder name="f1" displayName="VMC" projectFiles="true">
-      </logicalFolder>
       <itemPath>Coulomb.cpp</itemPath>
       <itemPath>Diffusion.cpp</itemPath>
       <itemPath>Jastrow.cpp</itemPath>
@@ -36,6 +27,7 @@
       <itemPath>Orbitals.cpp</itemPath>
       <itemPath>Potential.cpp</itemPath>
       <itemPath>QMC.cpp</itemPath>
+      <itemPath>QMCInitializer.cpp</itemPath>
       <itemPath>Sampling.cpp</itemPath>
       <itemPath>System.cpp</itemPath>
       <itemPath>Walker.cpp</itemPath>
@@ -50,6 +42,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="CodeValidator"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/VMCtest.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -70,6 +68,23 @@
           <commandlineTool>g++</commandlineTool>
         </ccTool>
       </compileType>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
