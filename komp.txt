@@ -1,0 +1,1 @@
+g++ -larmadillo -lblas -llapack Coulomb.cpp Diffusion.cpp Jastrow.cpp Kinetics.cpp lib.cpp Orbitals.cpp Potential.cpp QMC.cpp QMCInitializer.cpp QMCmain.cpp Sampling.cpp System.cpp Walker.cpp -o test.x

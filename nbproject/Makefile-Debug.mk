@@ -44,8 +44,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/Coulomb.o \
 	${OBJECTDIR}/Sampling.o \
 	${OBJECTDIR}/lib.o \
-	${OBJECTDIR}/Diffusion.o \
 	${OBJECTDIR}/System.o \
+	${OBJECTDIR}/Diffusion.o \
 	${OBJECTDIR}/Jastrow.o
 
 # Test Directory
@@ -59,8 +59,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-llapack -lblas -larmadillo -O3
+CXXFLAGS=-llapack -lblas -larmadillo -O3
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -69,7 +69,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L../../../programmer/Armadillo/lib64 -larmadillo
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -82,67 +82,67 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/qmc: ${OBJECTFILES}
 ${OBJECTDIR}/Orbitals.o: Orbitals.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals.o Orbitals.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals.o Orbitals.cpp
 
 ${OBJECTDIR}/Walker.o: Walker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker.o Walker.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker.o Walker.cpp
 
 ${OBJECTDIR}/Potential.o: Potential.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential.o Potential.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential.o Potential.cpp
 
 ${OBJECTDIR}/QMC.o: QMC.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC.o QMC.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC.o QMC.cpp
 
 ${OBJECTDIR}/QMCInitializer.o: QMCInitializer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer.o QMCInitializer.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer.o QMCInitializer.cpp
 
 ${OBJECTDIR}/QMCmain.o: QMCmain.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain.o QMCmain.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain.o QMCmain.cpp
 
 ${OBJECTDIR}/Kinetics.o: Kinetics.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics.o Kinetics.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics.o Kinetics.cpp
 
 ${OBJECTDIR}/Coulomb.o: Coulomb.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb.o Coulomb.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb.o Coulomb.cpp
 
 ${OBJECTDIR}/Sampling.o: Sampling.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling.o Sampling.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling.o Sampling.cpp
 
 ${OBJECTDIR}/lib.o: lib.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib.o lib.cpp
-
-${OBJECTDIR}/Diffusion.o: Diffusion.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion.o Diffusion.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib.o lib.cpp
 
 ${OBJECTDIR}/System.o: System.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/System.o System.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/System.o System.cpp
+
+${OBJECTDIR}/Diffusion.o: Diffusion.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion.o Diffusion.cpp
 
 ${OBJECTDIR}/Jastrow.o: Jastrow.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow.o Jastrow.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow.o Jastrow.cpp
 
 # Subprojects
 .build-subprojects:
@@ -151,13 +151,13 @@ ${OBJECTDIR}/Jastrow.o: Jastrow.cpp
 .build-tests-conf: .build-conf ${TESTFILES}
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/VMCtest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+	${LINK.cc} -larmadillo -lblas -llapack -larmadillo -lblas -llapack -O3 -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -larmadillo -larmadillo 
 
 
 ${TESTDIR}/tests/VMCtest.o: tests/VMCtest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.cc) -g -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/VMCtest.o tests/VMCtest.cpp
+	$(COMPILE.cc) -g -I. -I. -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${TESTDIR}/tests/VMCtest.o tests/VMCtest.cpp
 
 
 ${OBJECTDIR}/Orbitals_nomain.o: ${OBJECTDIR}/Orbitals.o Orbitals.cpp 
@@ -168,7 +168,7 @@ ${OBJECTDIR}/Orbitals_nomain.o: ${OBJECTDIR}/Orbitals.o Orbitals.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals_nomain.o Orbitals.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Orbitals_nomain.o Orbitals.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Orbitals.o ${OBJECTDIR}/Orbitals_nomain.o;\
 	fi
@@ -181,7 +181,7 @@ ${OBJECTDIR}/Walker_nomain.o: ${OBJECTDIR}/Walker.o Walker.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker_nomain.o Walker.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Walker_nomain.o Walker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Walker.o ${OBJECTDIR}/Walker_nomain.o;\
 	fi
@@ -194,7 +194,7 @@ ${OBJECTDIR}/Potential_nomain.o: ${OBJECTDIR}/Potential.o Potential.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential_nomain.o Potential.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Potential_nomain.o Potential.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Potential.o ${OBJECTDIR}/Potential_nomain.o;\
 	fi
@@ -207,7 +207,7 @@ ${OBJECTDIR}/QMC_nomain.o: ${OBJECTDIR}/QMC.o QMC.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC_nomain.o QMC.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMC_nomain.o QMC.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/QMC.o ${OBJECTDIR}/QMC_nomain.o;\
 	fi
@@ -220,7 +220,7 @@ ${OBJECTDIR}/QMCInitializer_nomain.o: ${OBJECTDIR}/QMCInitializer.o QMCInitializ
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer_nomain.o QMCInitializer.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCInitializer_nomain.o QMCInitializer.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/QMCInitializer.o ${OBJECTDIR}/QMCInitializer_nomain.o;\
 	fi
@@ -233,7 +233,7 @@ ${OBJECTDIR}/QMCmain_nomain.o: ${OBJECTDIR}/QMCmain.o QMCmain.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain_nomain.o QMCmain.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/QMCmain_nomain.o QMCmain.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/QMCmain.o ${OBJECTDIR}/QMCmain_nomain.o;\
 	fi
@@ -246,7 +246,7 @@ ${OBJECTDIR}/Kinetics_nomain.o: ${OBJECTDIR}/Kinetics.o Kinetics.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics_nomain.o Kinetics.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Kinetics_nomain.o Kinetics.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Kinetics.o ${OBJECTDIR}/Kinetics_nomain.o;\
 	fi
@@ -259,7 +259,7 @@ ${OBJECTDIR}/Coulomb_nomain.o: ${OBJECTDIR}/Coulomb.o Coulomb.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb_nomain.o Coulomb.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Coulomb_nomain.o Coulomb.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Coulomb.o ${OBJECTDIR}/Coulomb_nomain.o;\
 	fi
@@ -272,7 +272,7 @@ ${OBJECTDIR}/Sampling_nomain.o: ${OBJECTDIR}/Sampling.o Sampling.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling_nomain.o Sampling.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling_nomain.o Sampling.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Sampling.o ${OBJECTDIR}/Sampling_nomain.o;\
 	fi
@@ -285,22 +285,9 @@ ${OBJECTDIR}/lib_nomain.o: ${OBJECTDIR}/lib.o lib.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib_nomain.o lib.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib_nomain.o lib.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/lib.o ${OBJECTDIR}/lib_nomain.o;\
-	fi
-
-${OBJECTDIR}/Diffusion_nomain.o: ${OBJECTDIR}/Diffusion.o Diffusion.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Diffusion.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion_nomain.o Diffusion.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Diffusion.o ${OBJECTDIR}/Diffusion_nomain.o;\
 	fi
 
 ${OBJECTDIR}/System_nomain.o: ${OBJECTDIR}/System.o System.cpp 
@@ -311,9 +298,22 @@ ${OBJECTDIR}/System_nomain.o: ${OBJECTDIR}/System.o System.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/System_nomain.o System.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/System_nomain.o System.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/System.o ${OBJECTDIR}/System_nomain.o;\
+	fi
+
+${OBJECTDIR}/Diffusion_nomain.o: ${OBJECTDIR}/Diffusion.o Diffusion.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Diffusion.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion_nomain.o Diffusion.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Diffusion.o ${OBJECTDIR}/Diffusion_nomain.o;\
 	fi
 
 ${OBJECTDIR}/Jastrow_nomain.o: ${OBJECTDIR}/Jastrow.o Jastrow.cpp 
@@ -324,7 +324,7 @@ ${OBJECTDIR}/Jastrow_nomain.o: ${OBJECTDIR}/Jastrow.o Jastrow.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow_nomain.o Jastrow.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Jastrow_nomain.o Jastrow.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Jastrow.o ${OBJECTDIR}/Jastrow_nomain.o;\
 	fi

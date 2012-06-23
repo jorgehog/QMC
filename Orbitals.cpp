@@ -32,8 +32,8 @@ double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) {
     double r2, H, x, y;
 
     r2 = walker->get_r_i2(particle);
-    x = walker->r[particle][0];
-    y = walker->r[particle][1];
+    x = walker->r(particle,0);
+    y = walker->r(particle,1);
 
 
     if (q_num == 0) {
@@ -78,13 +78,13 @@ double oscillator_basis_HC::del_phi(const Walker* walker, int particle, int q_nu
 
     r2 = walker->get_r_i2(particle);
 
-    x = walker->r[particle][0];
-    y = walker->r[particle][1];
+    x = walker->r(particle,0);
+    y = walker->r(particle,1);
 
 
     //Hermite polynomials (up to 4)
     if (q_num == 0) {
-        H = -w * alpha * walker->r[particle][d];
+        H = -w * alpha * walker->r(particle,d);
     } else if (q_num == 1) {
         if (d == 0) {
             H = 2 * (1 - alpha * w * x * x);
@@ -181,8 +181,8 @@ double oscillator_basis_HC::lapl_phi(const Walker* walker, int particle, int q_n
     double r2, H, x, y, aw2;
 
     r2 = walker->get_r_i2(particle);
-    x = walker->r[particle][0];
-    y = walker->r[particle][1];
+    x = walker->r(particle,0);
+    y = walker->r(particle,1);
     aw2 = alpha * alpha * w * w;
 
 

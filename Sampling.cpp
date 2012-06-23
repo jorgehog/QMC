@@ -23,13 +23,13 @@ void Sampling::set_trial_pos(Walker* walker, bool load_VMC_dist, std::ifstream* 
         for (i = 0; i < n_p; i++) {
             for (j = 0; j < dim; j++) {
                 *file >> pos;
-                walker->r[i][j] = pos;
+                walker->r(i, j) = pos;
             }
         }
     } else {
         for (i = 0; i < n_p; i++) {
             for (j = 0; j < dim; j++) {
-                walker->r[i][j] = diffusion->Diffusion::get_new_pos(walker, i, j);
+                walker->r(i, j) = diffusion->Diffusion::get_new_pos(walker, i, j);
             }
         }
     }
@@ -50,11 +50,11 @@ double Sampling::get_g_ratio(Walker* walker_post, Walker* walker_pre, int partic
 
 void Sampling::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     for (int i = 0; i < dim; i++) {
-        walker_pre->r[particle][i] = walker_post->r[particle][i];
+        walker_pre->r(particle, i) = walker_post->r(particle, i);
     }
 
     for (int i = 0; i < n_p; i++) {
-        walker_pre->r_rel[i][particle] = walker_pre->r_rel[particle][i] = walker_post->r_rel[i][particle];
+        walker_pre->r_rel(i, particle) = walker_pre->r_rel(particle, i) = walker_post->r_rel(i, particle);
     }
 }
 
@@ -69,11 +69,6 @@ void Brute_Force::update_walker(Walker* walker_pre, Walker* walker_post, int par
 }
 
 void Brute_Force::get_necessities(Walker* walker) {
-    if (qmc->get_kinetic_bool()) {
-        qmc->get_system_ptr()->initialize(walker);
-        qmc->get_gradients(walker);
-    }
-
     qmc->get_wf_value(walker);
 }
 
@@ -81,8 +76,13 @@ void Brute_Force::update_necessities(Walker* walker_pre, Walker* walker_post, in
     qmc->get_wf_value(walker_post);
 }
 
-void Brute_Force::calculate_energy_necessities(Walker* walker) {
-    qmc->get_kinetics_ptr()->calculate_energy_necessities_BF(walker);
+void Brute_Force::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+    //Nothing to reset;
+}
+
+void Brute_Force::calculate_energy_necessities_CF(Walker* walker) {
+    qmc->get_system_ptr()->initialize(walker);
+    qmc->get_gradients(walker);
 }
 
 double Brute_Force::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
@@ -93,17 +93,13 @@ void Brute_Force::copy_walker(Walker* parent, Walker* child) {
     qmc->get_kinetics_ptr()->copy_walker_BF(parent, child);
 }
 
-
-
-
-
 Importance::Importance(int n_p, int dim, double timestep, long random_seed, double D) : Sampling(n_p, dim) {
     is_importance = true;
     diffusion = new Fokker_Planck(n_p, dim, timestep, random_seed, D);
 }
 
-void Importance::calculate_energy_necessities(Walker* walker) {
-    //no necessities
+void Importance::calculate_energy_necessities_CF(Walker* walker) {
+    //CF IS has no spesific necessities
 }
 
 void Importance::copy_walker(Walker* parent, Walker* child) {
@@ -112,19 +108,28 @@ void Importance::copy_walker(Walker* parent, Walker* child) {
 
 void Importance::update_necessities(Walker* walker_pre, Walker* walker_post, int particle) {
     qmc->get_kinetics_ptr()->update_necessities_IS(walker_pre, walker_post, particle);
+    qmc->get_kinetics_ptr()->get_QF(walker_post);
 }
 
 void Importance::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     this->Sampling::update_walker(walker_pre, walker_post, particle);
-    qmc->get_system_ptr()->update_walker(walker_pre, walker_post, particle);
     qmc->get_kinetics_ptr()->update_walker_IS(walker_pre, walker_post, particle);
+
+    for (int i = 0; i < n_p; i++) {
+        for (int j = 0; j < dim; j++) {
+            walker_pre->qforce(i, j) = walker_post->qforce(i, j);
+        }
+    }
 }
 
-double Importance::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle){
-    //NOT IMPLEMENTED
-    return 0;
+void Importance::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+    qmc->get_kinetics_ptr()->reset_walker_IS(walker_pre, walker_post, particle);
 }
 
-void Importance::get_necessities(Walker* walker){
-    //NOT IMPLEMENTED
+double Importance::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
+    return walker_post->ratio;
+}
+
+void Importance::get_necessities(Walker* walker) {
+    qmc->get_kinetics_ptr()->get_necessities_IS(walker);
 }

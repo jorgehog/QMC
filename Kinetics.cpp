@@ -40,15 +40,15 @@ double Numerical::get_KE(Walker* walker) {
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            wfplus->r[i][j] = wfminus->r[i][j] = walker->r[i][j];
+            wfplus->r(i, j) = wfminus->r(i, j) = walker->r(i, j);
         }
     }
 
     e_kinetic = 0;
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            wfplus->r[i][j] = walker->r[i][j] + h;
-            wfminus->r[i][j] = walker->r[i][j] - h;
+            wfplus->r(i, j) = walker->r(i, j) + h;
+            wfminus->r(i, j) = walker->r(i, j) - h;
 
             wfplus->make_rel_matrix();
             wfminus->make_rel_matrix();
@@ -61,10 +61,10 @@ double Numerical::get_KE(Walker* walker) {
             wf_plus = wfplus->value;
 
             //cout << "SMALL " << wf_min + wf_plus - 2 * wf << endl;
-            
+
             e_kinetic -= (wf_min + wf_plus - 2 * wf);
-            wfplus->r[i][j] = walker->r[i][j];
-            wfminus->r[i][j] = walker->r[i][j];
+            wfplus->r(i, j) = walker->r(i, j);
+            wfminus->r(i, j) = walker->r(i, j);
         }
     }
 
@@ -81,15 +81,15 @@ void Numerical::get_QF(Walker* walker) {
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            wfplus->r[i][j] = wfminus->r[i][j] = walker->r[i][j];
+            wfplus->r(i, j) = wfminus->r(i, j) = walker->r(i, j);
         }
     }
 
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            wfplus->r[i][j] = walker->r[i][j] + h;
-            wfminus->r[i][j] = walker->r[i][j] - h;
+            wfplus->r(i, j) = walker->r(i, j) + h;
+            wfminus->r(i, j) = walker->r(i, j) - h;
 
             wfplus->make_rel_matrix();
             wfminus->make_rel_matrix();
@@ -100,27 +100,32 @@ void Numerical::get_QF(Walker* walker) {
             wf_min = wfminus->value;
             wf_plus = wfplus->value;
 
-            walker->qforce[i][j] = (wf_plus - wf_min) / (wf * h);
+            walker->qforce(i, j) = (wf_plus - wf_min) / (wf * h);
 
-            wfplus->r[i][j] = walker->r[i][j];
-            wfminus->r[i][j] = walker->r[i][j];
+            wfplus->r(i, j) = walker->r(i, j);
+            wfminus->r(i, j) = walker->r(i, j);
 
         }
     }
 }
 
-void Numerical::update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle) {
-    qmc->get_system_ptr()->calc_for_newpos(walker_pre, walker_post, particle);
-    qmc->get_wf_value(walker_post);
+void Numerical::get_necessities_IS(Walker* walker){
+    //no necessities;
 }
 
-void Numerical::calculate_energy_necessities_BF(Walker* walker) {
-    //No necessities.
-    //laplace?
+void Numerical::update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle) {
+    qmc->get_wf_value(walker_post);
+    walker_post->ratio = walker_post->value/walker_pre->value;
 }
+
+
+void Numerical::calculate_energy_necessities(Walker* walker) {
+    //No necessities.
+}
+
 
 void Numerical::update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) {
-    walker_post->value = walker_pre->value;
+    walker_pre->value = walker_post->value;
 }
 
 void Numerical::copy_walker_BF(Walker* parent, Walker* child) {
@@ -131,6 +136,10 @@ void Numerical::copy_walker_IS(Walker* parent, Walker* child) {
     qmc->get_system_ptr()->copy_walker(parent, child);
 }
 
+void Numerical::reset_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) {
+    //Nothing to reset;
+}
+
 Closed_form::Closed_form(int n_p, int dim)
 : Kinetics(n_p, dim) {
 
@@ -139,15 +148,17 @@ Closed_form::Closed_form(int n_p, int dim)
 void Closed_form::update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) {
     int start = n2 * (particle >= n2);
 
+    qmc->get_system_ptr()->update_walker(walker_pre, walker_post, particle);
+    
     for (int i = start; i < start + n2; i++) {
         for (int j = 0; j < dim; j++) {
-            walker_pre->spatial_grad[i][j] = walker_post->spatial_grad[i][j];
+            walker_pre->spatial_grad(i, j) = walker_post->spatial_grad(i, j);
         }
     }
 
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
-            walker_pre->jast_grad[i][j] = walker_post->jast_grad[i][j];
+            walker_pre->jast_grad(i, j) = walker_post->jast_grad(i, j);
         }
     }
 }
@@ -162,12 +173,12 @@ double Closed_form::get_KE(Walker* walker) {
     //the X-term
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            xterm += walker->jast_grad[i][j] * walker->spatial_grad[i][j];
+            xterm += walker->jast_grad(i, j) * walker->spatial_grad(i, j);
         }
     }
 
 
-    e_kinetic = 2 * xterm + walker->lapl_sum; //LAPLACE??S
+    e_kinetic = 2 * xterm + walker->lapl_sum;
 
 
     return -0.5 * e_kinetic;
@@ -178,18 +189,28 @@ void Closed_form::get_QF(Walker* walker) {
 
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < dim; j++) {
-            walker->qforce[i][j] = 2 * (walker->jast_grad[i][j] + walker->spatial_grad[i][j]);
+            walker->qforce(i, j) = 2 * (walker->jast_grad(i, j) + walker->spatial_grad(i, j));
         }
     }
 }
 
-void Closed_form::calculate_energy_necessities_BF(Walker* walker) {
+void Closed_form::get_necessities_IS(Walker* walker){
     qmc->get_system_ptr()->initialize(walker);
     qmc->get_gradients(walker);
-    //laplace?
+    get_QF(walker);
+    
+    if (walker->check_bad_qforce()){
+        qmc->get_sampling_ptr()->set_trial_pos(walker);
+    }
+}
+
+void Closed_form::calculate_energy_necessities(Walker* walker){
+    qmc->get_sampling_ptr()->calculate_energy_necessities_CF(walker);
+    qmc->get_laplsum(walker);
 }
 
 void Closed_form::update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle) {
+    walker_post->ratio = qmc->get_system_ptr()->get_spatial_ratio(walker_post, walker_pre, particle);
     qmc->get_system_ptr()->calc_for_newpos(walker_pre, walker_post, particle);
     qmc->get_gradients(walker_post, particle);
 }
@@ -197,8 +218,8 @@ void Closed_form::update_necessities_IS(Walker* walker_pre, Walker* walker_post,
 void Closed_form::copy_walker_BF(Walker* parent, Walker* child) {
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
-            child->jast_grad[i][j] = parent->jast_grad[i][j];
-            child->spatial_grad[i][j] = parent->spatial_grad[i][j];
+            child->jast_grad(i, j) = parent->jast_grad(i, j);
+            child->spatial_grad(i, j) = parent->spatial_grad(i, j);
         }
     }
 
@@ -210,10 +231,24 @@ void Closed_form::copy_walker_BF(Walker* parent, Walker* child) {
 void Closed_form::copy_walker_IS(Walker* parent, Walker* child) {
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
-            child->jast_grad[i][j] = parent->jast_grad[i][j];
-            child->spatial_grad[i][j] = parent->spatial_grad[i][j];
+            child->jast_grad(i, j) = parent->jast_grad(i, j);
+            child->spatial_grad(i, j) = parent->spatial_grad(i, j);
         }
     }
 
     qmc->get_system_ptr()->copy_walker(parent, child);
+}
+
+void Closed_form::reset_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) {
+
+    qmc->get_system_ptr()->reset_walker_ISCF(walker_pre, walker_post, particle);
+    
+    int start = n2 * (particle >= n2);
+
+    //updating the part with the same spin as the moved particle
+    for (int i = start; i < n2 + start; i++) {
+        for (int j = 0; j < dim; j++) {
+            walker_post->spatial_grad(i,j) = walker_pre->spatial_grad(i,j);
+        }
+    }
 }

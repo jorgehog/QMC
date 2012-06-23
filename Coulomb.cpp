@@ -29,7 +29,7 @@ double full_Coulomb::get_Coulomb(const Walker* walker) const {
     e_coulomb = 0;
     for (i = 0; i < n_p - 1; i++) {
         for (j = i + 1; j < n_p; j++) {
-            e_coulomb += 1 / walker->r_rel[i][j];
+            e_coulomb += 1 / walker->r_rel(i,j);
         }
     }
 

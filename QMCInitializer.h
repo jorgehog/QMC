@@ -8,7 +8,7 @@
 #ifndef QMCINITIALIZER_H
 #define	QMCINITIALIZER_H
 
-void initVMC(int n_p, int dim, double w, double &dt, std::string type, double &alpha, double &beta);
+void initVMC(int n_p, int dim, double w, double &dt, std::string type, std::string sampling, double &alpha, double &beta);
 
 
 #endif	/* QMCINITIALIZER_H */

@@ -3,10 +3,19 @@ using namespace std;
 
 //TMP FUNC. WILL BE PYTHON SCRIPTED
 
-void initVMC(int n_p, int dim, double w, double &dt, std::string type, double &alpha, double &beta) {
-    dt = 0.5;
+void initVMC(int n_p, int dim, double w, double &dt, std::string type, std::string sampling, double &alpha, double &beta) {
+    
+    if (sampling == "BF") {
+        dt = 0.5;
+    } else if (sampling == "IS") {
+        dt = 0.05;
+    } else {
+        cout << "Unknown sample method" << endl;
+    }
+    
+    
     if ((dim == 2) && (type == "QDots")) {
-        if (n_p = 2) {
+        if (n_p == 2) {
             if (w == 1.0) {
                 alpha = 0.987;
                 beta = 0.398;

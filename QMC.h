@@ -61,10 +61,8 @@ public:
     void get_gradients(Walker* walker, int particle);
     void get_gradients(Walker* walker);
     void get_wf_value(Walker* walker);
+    void get_laplsum(Walker* walker);
 
-    bool get_kinetic_bool() {
-        return kinetics->get_closed_form();
-    }
 
     System* get_system_ptr() {
         return system;
@@ -72,6 +70,10 @@ public:
 
     Kinetics* get_kinetics_ptr() {
         return kinetics;
+    }
+    
+    Sampling* get_sampling_ptr() {
+        return sampling;
     }
 };
 

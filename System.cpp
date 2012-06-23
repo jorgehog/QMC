@@ -9,7 +9,6 @@
 #include "Jastrow.h"
 #include "Walker.h"
 #include "Potential.h"
-#include "lib.h"
 
 System::System(int n_p, int dim, Potential* pot, Orbitals* orbital) {
     this->n_p = n_p;
@@ -26,10 +25,10 @@ double System::get_potential_energy(Walker* walker) {
 Fermions::Fermions(int n_p, int dim, Potential* pot, Orbitals* orbital)
 : System(n_p, dim, pot, orbital) {
 
-    n2 = n_p/2;
-    
-    s_up = (double **) matrix(n_p / 2, n_p / 2, sizeof (double));
-    s_down = (double **) matrix(n_p / 2, n_p / 2, sizeof (double));
+    n2 = n_p / 2;
+
+    s_up = arma::zeros<arma::mat > (n_p / 2, n_p / 2);
+    s_down = arma::zeros<arma::mat > (n_p / 2, n_p / 2);
 
 }
 
@@ -45,29 +44,14 @@ void Fermions::get_spatial_grad(Walker* walker, int particle) {
 
 
     start = n2 * (particle >= n2);
-    //    if (particle >= n2) {
-    //        start = n2;
-    //    } else {
-    //        start = 0;
-    //    }
-
-    //    //if the last metropolis-test went through, there is no need to overwrite data
-    //    if (accepted_last == false) {
-    //        for (i = n2 - start; i < n_p - start; i++) {
-    //            for (k = 0; k < dim; k++) {
-    //                wf_new->spatial_grad[i][k] = wf_old->spatial_grad[i][k];
-    //            }
-    //        }
-    //    }
-
 
     //updating the part with the same spin as the moved particle
     for (i = start; i < n2 + start; i++) {
         for (k = 0; k < dim; k++) {
-            walker->spatial_grad[i][k] = 0;
+            walker->spatial_grad(i, k) = 0;
 
             for (j = 0; j < n2; j++) {
-                walker->spatial_grad[i][k] += orbital->del_phi(walker, i, j, k) * walker->inv[j][i];
+                walker->spatial_grad(i, k) += orbital->del_phi(walker, i, j, k) * walker->inv(j, i);
             }
 
         }
@@ -79,91 +63,36 @@ void Fermions::initialize_slaters(const Walker* walker) {
 
     for (i = 0; i < n2; i++) {
         for (q_num = 0; q_num < n2; q_num++) {
-            s_up[i][q_num] = orbital->phi(walker, i, q_num);
-            s_down[i][q_num] = orbital->phi(walker, i + n2, q_num);
+            s_up(i, q_num) = orbital->phi(walker, i, q_num);
+            s_down(i, q_num) = orbital->phi(walker, i + n2, q_num);
         }
     }
 }
 
 double Fermions::get_det() {
-    int i;
-    double det, g1, g2;
-    int *dummy = new int[n2];
-
-    ludcmp(s_up, n2, dummy, &g1);
-    ludcmp(s_down, n2, dummy, &g2);
-
-    det = 1;
-    for (i = 0; i < n2; i++) {
-        det *= s_up[i][i] * s_down[i][i];
-    }
-
-    delete[] dummy;
-
-    return g1 * g2*det;
+    return arma::det(s_up) * arma::det(s_down);
+    //    double sign1, sign2, ldet1, ldet2;
+    //    arma::log_det(ldet1, sign1, s_up);
+    //    arma::log_det(ldet2, sign2, s_down);
+    //    return sign1*sign2*exp(ldet1 + ldet2);
 }
 
 void Fermions::invert_slaters() {
-    int i, j;
-    double d;
-    // allocate space in memory
-    int* indx = new int[n2];
-    double* col = new double[n2];
-    double** y = (double **) matrix(n2, n2, sizeof (double));
-
-
-    //SPIN UP:
-    ludcmp(s_up, n2, indx, &d); // LU decompose a
-
-    // find inverse of a by columns
-    for (j = 0; j < n2; j++) {
-        // initialize right-side of linear equations
-        for (i = 0; i < n2; i++) col[i] = 0.0;
-        col[j] = 1.0;
-        lubksb(s_up, n2, indx, col);
-        // save result in y
-        for (i = 0; i < n2; i++) y[i][j] = col[i];
-    } //j-loop over columns
-    // return the inverse matrix in a
-    for (i = 0; i < n2; i++) {
-        for (j = 0; j < n2; j++) s_up[i][j] = y[i][j];
-    }
-
-
-    //SPIN DOWN:
-    ludcmp(s_down, n2, indx, &d); // LU decompose a
-
-    // find inverse of a by columns
-    for (j = 0; j < n2; j++) {
-        // initialize right-side of linear equations
-        for (i = 0; i < n2; i++) col[i] = 0.0;
-        col[j] = 1.0;
-        lubksb(s_down, n2, indx, col);
-        // save result in y
-        for (i = 0; i < n2; i++) y[i][j] = col[i];
-    } //j-loop over columns
-    // return the inverse matrix in a
-    for (i = 0; i < n2; i++) {
-        for (j = 0; j < n2; j++) s_down[i][j] = y[i][j];
-    }
-
-    delete[] col;
-    delete[] indx;
-    free_matrix((void **) y);
-
+    s_up = arma::inv(s_up);
+    s_down = arma::inv(s_down);
 }
 
 void Fermions::make_merged_inv(Walker* walker) {
     int i, j;
-
+    
     initialize_slaters(walker);
     invert_slaters();
 
     //merging the inverse matrices
     for (i = 0; i < n2; i++) {
         for (j = 0; j < n2; j++) {
-            walker->inv[i][j] = s_up[i][j];
-            walker->inv[i][j + n2] = s_down[i][j];
+            walker->inv(i, j) = s_up(i, j);
+            walker->inv(i, j + n2) = s_down(i, j);
         }
     }
 }
@@ -179,10 +108,9 @@ double Fermions::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int 
 
     s_ratio = 0;
     for (q_num = 0; q_num < n2; q_num++) {
-        s_ratio += orbital->phi(walker_post, particle, q_num) * walker_pre->inv[q_num][particle];
+        s_ratio += orbital->phi(walker_post, particle, q_num) * walker_pre->inv(q_num, particle);
     }
 
-    walker_post->ratio = s_ratio; //saving for use in update function
     return s_ratio;
 }
 
@@ -198,14 +126,14 @@ void Fermions::update_inverse(Walker* walker_old, Walker* walker_new, int partic
             sum = 0;
             if (j == particle) {
                 for (l = 0; l < n2; l++) {
-                    sum += orbital->phi(walker_old, particle, l) * walker_old->inv[l][j];
+                    sum += orbital->phi(walker_old, particle, l) * walker_old->inv(l, j);
                 }
-                walker_new->inv[k][j] = walker_old->inv[k][particle] / walker_new->ratio*sum;
+                walker_new->inv(k, j) = walker_old->inv(k, particle) / walker_new->ratio*sum;
             } else {
                 for (l = 0; l < n2; l++) {
-                    sum += orbital->phi(walker_new, particle, l) * walker_old->inv[l][j];
+                    sum += orbital->phi(walker_new, particle, l) * walker_old->inv(l, j);
                 }
-                walker_new->inv[k][j] = walker_old->inv[k][j] - walker_old->inv[k][particle] / walker_new->ratio*sum;
+                walker_new->inv(k, j) = walker_old->inv(k, j) - walker_old->inv(k, particle) / walker_new->ratio*sum;
             }
         }
     }
@@ -215,14 +143,14 @@ void Fermions::calc_for_newpos(Walker* walker_old, Walker* walker_new, int parti
     update_inverse(walker_old, walker_new, particle);
 }
 
-double Fermions::get_spatial_lapl_sum(const Walker* walker_new, const Walker* walker_old) {
+double Fermions::get_spatial_lapl_sum(const Walker* walker) {
     int i, j;
     double sum;
 
     sum = 0;
     for (i = 0; i < n_p; i++) {
         for (j = 0; j < n_p / 2; j++) {
-            sum += orbital->lapl_phi(walker_new, i, j) * walker_old->inv[j][i];
+            sum += orbital->lapl_phi(walker, i, j) * walker->inv(j, i);
         }
     }
 
@@ -232,18 +160,30 @@ double Fermions::get_spatial_lapl_sum(const Walker* walker_new, const Walker* wa
 void Fermions::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     int start = n2 * (particle >= n2);
 
-    //updating the parts with the same spin as the moved particle
+    //Reseting the parts with the same spin as the moved particle
     for (int i = start; i < start + n2; i++) {
         for (int j = 0; j < n2; j++) {
-            walker_pre->inv[j][i] = walker_post->inv[j][i];
+            walker_pre->inv(j, i) = walker_post->inv(j, i);
         }
     }
 }
 
 void Fermions::copy_walker(Walker* parent, Walker* child) {
-    for (int i = 0; i < n_p; i++) {
-        for (int j = 0; j < n2; j++) {
-            child->inv[i][j] = parent->inv[i][j];
+    for (int i = 0; i < n2; i++) {
+        for (int j = 0; j < n_p; j++) {
+            child->inv(i, j) = parent->inv(i, j);
+        }
+    }
+}
+
+void Fermions::reset_walker_ISCF(Walker* walker_pre, Walker* walker_post, int particle) {
+
+    int start = n2 * (particle >= n2);
+
+    //Reseting the part of the inverse with the same spin as particle i
+    for (int i = 0; i < n2; i++) {
+        for (int j = start; j < n2 + start; j++) {
+            walker_post->inv(i,j) = walker_pre->inv(i,j); 
         }
     }
 }

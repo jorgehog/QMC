@@ -36,8 +36,12 @@ public:
     virtual double get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle);
     virtual void get_necessities(Walker* walker) = 0;
     virtual void update_necessities(Walker* walker_pre, Walker* walker_post, int particle) = 0;
-    virtual void calculate_energy_necessities(Walker* walker) = 0;
+
+    virtual void calculate_energy_necessities_CF(Walker* walker) = 0;
+    //Numerical has no necessities
+
     virtual void copy_walker(Walker* parent, Walker* child) = 0;
+    virtual void reset_walker(Walker* walker_pre, Walker* walker_post, int particle) = 0;
 
     void set_qmc_ptr(QMC* qmc) {
         this->qmc = qmc;
@@ -46,8 +50,8 @@ public:
     bool get_importance_bool() {
         return is_importance;
     }
-    
-    double call_RNG(){
+
+    double call_RNG() {
         return diffusion->call_RNG();
     }
 
@@ -61,12 +65,12 @@ public:
 
     virtual void get_necessities(Walker* walker);
     virtual void update_necessities(Walker* walker_pre, Walker* walker_post, int particle);
-    virtual void calculate_energy_necessities(Walker* walker);
+    virtual void calculate_energy_necessities_CF(Walker* walker);
 
     virtual double get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle);
 
     virtual void copy_walker(Walker* parent, Walker* child);
-
+    virtual void reset_walker(Walker* walker_pre, Walker* walker_post, int particle);
 
 };
 
@@ -80,9 +84,12 @@ public:
 
     virtual void get_necessities(Walker* walker);
     virtual void update_necessities(Walker* walker_pre, Walker* walker_post, int particle);
-    virtual void calculate_energy_necessities(Walker* walker);
+
+    virtual void calculate_energy_necessities_CF(Walker* walker);
+
 
     virtual void copy_walker(Walker* parent, Walker* child);
+    virtual void reset_walker(Walker* walker_pre, Walker* walker_post, int particle);
 };
 
 #endif	/* SAMPLING_H */

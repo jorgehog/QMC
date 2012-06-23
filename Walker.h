@@ -8,6 +8,9 @@
 #ifndef WALKER_H
 #define	WALKER_H
 
+#include <armadillo>
+
+using namespace arma;
 
 class Walker {
 protected:
@@ -23,14 +26,14 @@ public:
     double value;
     double lapl_sum;
     
-    double** r;
-    double** r_rel;
+    mat r;
+    mat r_rel;
 
-    double** qforce;
+    mat qforce;
     
-    double** spatial_grad;
-    double** jast_grad;
-    double** inv;
+    mat spatial_grad;
+    mat jast_grad;
+    mat inv;
     
     double get_r_i2(int i) const;
     
@@ -39,6 +42,8 @@ public:
     void make_rel_matrix();
     
     bool is_singular();
+    
+    bool check_bad_qforce();
 
 };
 

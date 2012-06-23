@@ -11,6 +11,7 @@
 #include "Potential.h"
 #include "Walker.h"
 #include "Orbitals.h"
+#include <armadillo>
 
 class System {
 protected:
@@ -35,18 +36,19 @@ public:
 
     virtual double get_spatial_wf(const Walker* walker) = 0;
     virtual void get_spatial_grad(Walker* walker, int particle) = 0;
-    virtual double get_spatial_lapl_sum(const Walker* walker_new, const Walker* walker_old) = 0;
+    virtual double get_spatial_lapl_sum(const Walker* walker) = 0;
     virtual void initialize(Walker* walker) = 0;
 
     virtual void copy_walker(Walker* parent, Walker* child) = 0;
+    virtual void reset_walker_ISCF(Walker* walker_pre, Walker* walker_post, int particle) = 0;
 };
 
 class Fermions : public System {
 protected:
     int n2;
 
-    double ** s_up;
-    double ** s_down;
+    arma::mat s_up;
+    arma::mat s_down;
 
     
     void initialize_slaters(const Walker* walker);
@@ -64,10 +66,11 @@ public:
     void update_walker(Walker* walker_pre, Walker* walker_post, int particle);
     
     virtual double get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle);
-    virtual double get_spatial_lapl_sum(const Walker* walker_new, const Walker* walker_old);
+    virtual double get_spatial_lapl_sum(const Walker* walker);
     virtual double get_spatial_wf(const Walker* walker);
     
     virtual void copy_walker(Walker* parent, Walker* child);
+    virtual void reset_walker_ISCF(Walker* walker_pre, Walker* walker_post, int particle);
 
 };
 

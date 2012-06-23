@@ -9,6 +9,7 @@
 #define	JASTROW_H
 
 #include "Walker.h"
+#include <armadillo>
 
 class Jastrow {
 protected:
@@ -59,7 +60,7 @@ public:
 class Pade_Jastrow : public Jastrow {
 protected:
     double beta;
-    double **a;
+    arma::mat a;
 
 public:
 

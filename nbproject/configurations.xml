@@ -66,8 +66,33 @@
       <compileType>
         <ccTool>
           <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>../../../programmer/Armadillo/include</pElem>
+          </incDir>
+          <commandLine>-llapack -lblas -larmadillo -O3</commandLine>
         </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>../../../programmer/Armadillo/lib64</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>armadillo</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <folder path="TestFiles">
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>armadillo</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-larmadillo -lblas -llapack</commandLine>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f1">
         <cTool>
           <incDir>
@@ -78,11 +103,14 @@
         <ccTool>
           <incDir>
             <pElem>.</pElem>
-            <pElem>.</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerLibLibItem>armadillo</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-larmadillo -lblas -llapack -O3</commandLine>
         </linkerTool>
       </folder>
     </conf>
@@ -97,6 +125,10 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>../../../programmer/Armadillo/include</pElem>
+          </incDir>
+          <commandLine>-lblas -llapack -larmadillo</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -104,6 +136,11 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>armadillo</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
     </conf>
   </confs>

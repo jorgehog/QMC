@@ -45,33 +45,25 @@ void QMC::get_gradients(Walker* walker) {
     system->get_spatial_grad(walker, n2);
 }
 
+void QMC::get_laplsum(Walker* walker){
+    walker->lapl_sum = system->get_spatial_lapl_sum(walker) + jastrow->get_lapl_sum(walker);
+}
+
 void QMC::get_wf_value(Walker* walker) {
     walker->value = system->get_spatial_wf(walker) * jastrow->get_val(walker);
 }
 
-//void QMC::calc_for_diffused_walker(Walker* walker_prediff, Walker* walker_postdiff, int particle) {
-//    system.calc_for_newpos(walker_prediff, walker_postdiff, particle);
-//
-//    if (kinetics.get_closed_form()) {
-//        get_gradients(walker_postdiff, particle);
-//        walker_postdiff.lapl_sum = system.get_spatial_lapl_sum(walker_postdiff, walker_prediff) + jastrow.get_lapl_sum(walker_postdiff);
-//    } else {
-//        get_wf_value(walker_postdiff);
-//    }
-//}
 
 void QMC::update_pos(Walker* walker_pre, Walker* walker_post, int particle) {
-    //OBS: NEED TO RESET OLD VALUES?
-
-
+   
     for (int j = 0; j < dim; j++) {
-        walker_post->r[particle][j] = walker_pre->r[particle][j]
+        walker_post->r(particle, j) = walker_pre->r(particle, j)
                 + sampling->get_new_pos(walker_pre, particle, j);
     }
 
     for (int j = 0; j < n_p; j++) {
         if (j != particle) {
-            walker_post->r_rel[particle][j] = walker_post->r_rel[j][particle]
+            walker_post->r_rel(particle, j) = walker_post->r_rel(j, particle)
                     = walker_post->abs_relative(particle, j);
         }
     }
@@ -82,20 +74,17 @@ void QMC::update_necessities(Walker* walker_pre, Walker* walker_post, int partic
 }
 
 double QMC::get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int particle) {
-    double spatial = sampling->get_spatial_ratio(walker_post, walker_pre, particle);
-    double jast = jastrow->get_j_ratio(walker_post, walker_pre, particle);
+    double spatial_jast = sampling->get_spatial_ratio(walker_post, walker_pre, particle);
+    spatial_jast *= jastrow->get_j_ratio(walker_post, walker_pre, particle);
     double G = sampling->get_g_ratio(walker_post, walker_pre, particle);
-   
-    return spatial * spatial * jast*G;
+
+    return spatial_jast * spatial_jast * G;
 }
 
 void QMC::calculate_energy_necessities(Walker* walker) {
-    sampling->calculate_energy_necessities(walker);
+    kinetics->calculate_energy_necessities(walker);
 }
 
-void update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
-    //TODO
-}
 
 bool QMC::metropolis_test(double A) {
     double r = sampling->call_RNG();
@@ -115,22 +104,24 @@ void QMC::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
 
 void QMC::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     for (int i = 0; i < dim; i++) {
-        walker_post->r[particle][i] = walker_pre->r[particle][i];
+        walker_post->r(particle, i) = walker_pre->r(particle, i);
     }
 
     for (int i = 0; i < n_p; i++) {
-        walker_post->r_rel[i][particle] = walker_post->r_rel[particle][i] = walker_pre->r_rel[i][particle];
+        walker_post->r_rel(i, particle) = walker_post->r_rel(particle, i) = walker_pre->r_rel(i, particle);
     }
+    
+    sampling->reset_walker(walker_pre, walker_post, particle);
 }
 
 void QMC::copy_walker(Walker* parent, Walker* child) {
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
-            child->r[i][j] = parent->r[i][j];
+            child->r(i, j) = parent->r(i, j);
         }
 
         for (int k = i + 1; k < n_p - 1; k++) {
-            child->r_rel[i][k] = child->r_rel[k][i] = parent->r_rel[i][k];
+            child->r_rel(i, k) = child->r_rel(k, i) = parent->r_rel(i, k);
         }
     }
 
@@ -160,7 +151,7 @@ void VMC::initialize() {
 void VMC::calculate_energy(Walker* walker) {
     double local_E;
 
-    local_E = kinetics->get_KE(walker); //diverges
+    local_E = kinetics->get_KE(walker);
     local_E += system->get_potential_energy(walker);
     vmc_E += local_E;
     E2 += local_E*local_E;
@@ -174,22 +165,18 @@ void VMC::scale_values() {
 void VMC::run_method() {
 
     initialize();
-   
     
     for (int cycle = 0; cycle < n_c; cycle++) {
         for (int particle = 0; particle < n_p; particle++) {
+       
             update_pos(wfold, wfnew, particle);
             update_necessities(wfold, wfnew, particle);
-//            cout << "oldval" <<wfold->value << endl;
-//            cout << "newval "<<wfnew->value << endl;
-
+   
             double A = get_acceptance_ratio(wfold, wfnew, particle);
-     
+
             if (metropolis_test(A)) {
-//                cout << "accepted" << endl;
                 update_walker(wfold, wfnew, particle);
             } else {
-//                cout << "rejected" << endl;
                 reset_walker(wfold, wfnew, particle);
             }
         }
@@ -205,14 +192,14 @@ void VMC::run_method() {
 
 void VMC::output() {
     std::cout << "VMC energy: " << vmc_E << std::endl;
-    std::cout << "VMC variance: " << E2 - vmc_E*vmc_E << std::endl;
-    std::cout << "Acceptance ratio: " << accepted/(double)(n_c*n_p) << endl;
+    std::cout << "VMC variance: " << E2 - vmc_E * vmc_E << std::endl;
+    std::cout << "Acceptance ratio: " << accepted / (double) (n_c * n_p) << endl;
 }
 
-double VMC::get_var(){
+double VMC::get_var() {
     return E2 - vmc_E*vmc_E;
 }
 
-double VMC::get_energy(){
+double VMC::get_energy() {
     return vmc_E;
 }
