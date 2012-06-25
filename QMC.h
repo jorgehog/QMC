@@ -75,6 +75,10 @@ public:
     Sampling* get_sampling_ptr() {
         return sampling;
     }
+    
+    Jastrow* get_jastrow_ptr() {
+        return jastrow;
+    }
 };
 
 class VMC : public QMC {

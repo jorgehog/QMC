@@ -90,7 +90,8 @@ double Brute_Force::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, i
 }
 
 void Brute_Force::copy_walker(Walker* parent, Walker* child) {
-    qmc->get_kinetics_ptr()->copy_walker_BF(parent, child);
+    //qmc->get_kinetics_ptr()->copy_walker_BF(parent, child);
+    child->value = parent->value;
 }
 
 Importance::Importance(int n_p, int dim, double timestep, long random_seed, double D) : Sampling(n_p, dim) {
@@ -127,9 +128,14 @@ void Importance::reset_walker(Walker* walker_pre, Walker* walker_post, int parti
 }
 
 double Importance::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
-    return walker_post->ratio;
+    return qmc->get_kinetics_ptr()->get_spatial_ratio_IS(walker_post, walker_pre, particle);
 }
 
 void Importance::get_necessities(Walker* walker) {
     qmc->get_kinetics_ptr()->get_necessities_IS(walker);
+    qmc->get_kinetics_ptr()->get_QF(walker);
+
+    if (walker->check_bad_qforce()) {
+        Sampling::set_trial_pos(walker);
+    }
 }

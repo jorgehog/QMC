@@ -65,6 +65,7 @@ double Pade_Jastrow::get_val(Walker* walker) {
     int i, j;
     double arg;
 
+    arg = 0;
     for (i = 0; i < n_p - 1; i++) {
         for (j = i + 1; j < n_p; j++) {
             arg += a(i,j) * walker->r_rel(i,j) / (1.0 + beta * walker->r_rel(i,j));
@@ -105,7 +106,6 @@ double Pade_Jastrow::get_j_ratio(Walker* walker_new, Walker* walker_old, int i) 
         j_ratio += a(i,j) * (walker_new->r_rel(i,j) / (1.0 + beta * walker_new->r_rel(i,j)) -
                 walker_old->r_rel(i,j) / (1.0 + beta * walker_old->r_rel(i,j)));
     }
-
 
     return exp(j_ratio);
 }

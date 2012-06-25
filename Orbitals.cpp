@@ -24,9 +24,6 @@ oscillator_basis_HC::oscillator_basis_HC(int n_p, int dim, double alpha, double 
     this->w = w;
 }
 
-//void oscillator_basis_HC::set_frequency(double w){
-//    this->w = w;
-//}
 
 double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) {
     double r2, H, x, y;

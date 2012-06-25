@@ -32,7 +32,7 @@ public:
     
     virtual void calc_for_newpos(Walker* walker_old, Walker* walker_new, int particle) = 0;
 
-    virtual double get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) = 0;
+    virtual double get_spatial_ratio(Walker* walker_pre, Walker* walker_post, int particle) = 0;
 
     virtual double get_spatial_wf(const Walker* walker) = 0;
     virtual void get_spatial_grad(Walker* walker, int particle) = 0;

@@ -37,8 +37,6 @@ void Fermions::initialize(Walker* walker) {
 }
 
 
-//MUST HAVE NEW INV HERE
-
 void Fermions::get_spatial_grad(Walker* walker, int particle) {
     int i, j, k, start;
 
@@ -67,6 +65,9 @@ void Fermions::initialize_slaters(const Walker* walker) {
             s_down(i, q_num) = orbital->phi(walker, i + n2, q_num);
         }
     }
+    
+//    cout <<"UP"<< s_down*walker->inv(span(0,2), span(3,5)) << endl;
+//    cout <<"DOWN"<< s_up*walker->inv(span(0,2),span(0,2)) << endl;
 }
 
 double Fermions::get_det() {
@@ -102,7 +103,7 @@ double Fermions::get_spatial_wf(const Walker* walker) {
     return get_det();
 }
 
-double Fermions::get_spatial_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
+double Fermions::get_spatial_ratio(Walker* walker_pre, Walker* walker_post, int particle) {
     int q_num;
     double s_ratio;
 
@@ -128,12 +129,12 @@ void Fermions::update_inverse(Walker* walker_old, Walker* walker_new, int partic
                 for (l = 0; l < n2; l++) {
                     sum += orbital->phi(walker_old, particle, l) * walker_old->inv(l, j);
                 }
-                walker_new->inv(k, j) = walker_old->inv(k, particle) / walker_new->ratio*sum;
+                walker_new->inv(k, j) = walker_old->inv(k, particle) / walker_new->slater_ratio*sum;
             } else {
                 for (l = 0; l < n2; l++) {
                     sum += orbital->phi(walker_new, particle, l) * walker_old->inv(l, j);
                 }
-                walker_new->inv(k, j) = walker_old->inv(k, j) - walker_old->inv(k, particle) / walker_new->ratio*sum;
+                walker_new->inv(k, j) = walker_old->inv(k, j) - walker_old->inv(k, particle) / walker_new->slater_ratio*sum;
             }
         }
     }

@@ -33,6 +33,9 @@ public:
 
     virtual void update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) = 0;
     //NOTHING TO UPDATE FOR BF
+    
+    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle) = 0;
+    //BF ratio is indep. of kinetics
 
     virtual void calculate_energy_necessities(Walker* walker) = 0;
 
@@ -67,6 +70,8 @@ public:
 
     virtual void update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle);
 
+    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle);
+    
     virtual void calculate_energy_necessities(Walker* walker);
 
     virtual void update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle);
@@ -91,6 +96,8 @@ public:
 
     virtual void calculate_energy_necessities(Walker* walker);
 
+    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle);
+    
     virtual void update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle);
 
     virtual void copy_walker_IS(Walker* parent, Walker* child);

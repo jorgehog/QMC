@@ -45,7 +45,7 @@ void QMC::get_gradients(Walker* walker) {
     system->get_spatial_grad(walker, n2);
 }
 
-void QMC::get_laplsum(Walker* walker){
+void QMC::get_laplsum(Walker* walker) {
     walker->lapl_sum = system->get_spatial_lapl_sum(walker) + jastrow->get_lapl_sum(walker);
 }
 
@@ -53,9 +53,8 @@ void QMC::get_wf_value(Walker* walker) {
     walker->value = system->get_spatial_wf(walker) * jastrow->get_val(walker);
 }
 
-
 void QMC::update_pos(Walker* walker_pre, Walker* walker_post, int particle) {
-   
+
     for (int j = 0; j < dim; j++) {
         walker_post->r(particle, j) = walker_pre->r(particle, j)
                 + sampling->get_new_pos(walker_pre, particle, j);
@@ -75,16 +74,14 @@ void QMC::update_necessities(Walker* walker_pre, Walker* walker_post, int partic
 
 double QMC::get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int particle) {
     double spatial_jast = sampling->get_spatial_ratio(walker_post, walker_pre, particle);
-    spatial_jast *= jastrow->get_j_ratio(walker_post, walker_pre, particle);
     double G = sampling->get_g_ratio(walker_post, walker_pre, particle);
-
+ 
     return spatial_jast * spatial_jast * G;
 }
 
 void QMC::calculate_energy_necessities(Walker* walker) {
     kinetics->calculate_energy_necessities(walker);
 }
-
 
 bool QMC::metropolis_test(double A) {
     double r = sampling->call_RNG();
@@ -110,7 +107,7 @@ void QMC::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     for (int i = 0; i < n_p; i++) {
         walker_post->r_rel(i, particle) = walker_post->r_rel(particle, i) = walker_pre->r_rel(i, particle);
     }
-    
+
     sampling->reset_walker(walker_pre, walker_post, particle);
 }
 
@@ -120,7 +117,7 @@ void QMC::copy_walker(Walker* parent, Walker* child) {
             child->r(i, j) = parent->r(i, j);
         }
 
-        for (int k = i + 1; k < n_p - 1; k++) {
+        for (int k = i + 1; k < n_p; k++) {
             child->r_rel(i, k) = child->r_rel(k, i) = parent->r_rel(i, k);
         }
     }
@@ -153,6 +150,7 @@ void VMC::calculate_energy(Walker* walker) {
 
     local_E = kinetics->get_KE(walker);
     local_E += system->get_potential_energy(walker);
+    
     vmc_E += local_E;
     E2 += local_E*local_E;
 }
@@ -165,13 +163,13 @@ void VMC::scale_values() {
 void VMC::run_method() {
 
     initialize();
-    
+
     for (int cycle = 0; cycle < n_c; cycle++) {
         for (int particle = 0; particle < n_p; particle++) {
-       
+
             update_pos(wfold, wfnew, particle);
             update_necessities(wfold, wfnew, particle);
-   
+
             double A = get_acceptance_ratio(wfold, wfnew, particle);
 
             if (metropolis_test(A)) {

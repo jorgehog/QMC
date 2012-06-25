@@ -33,13 +33,13 @@ int main(int argc, char** argv) {
     dim = 2;
     w = 1;
 
-    n_c = 100000;
-
+    n_c = 1000000;
 
 
     string system = "QDots";
     string sampling = "IS";
-    string kinetics_type = "Num";
+    string kinetics_type = "CF";
+
 
     bool use_jastrow = true;
     bool use_coulomb = true;
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
 
     initVMC(n_p, dim, w, dt, system, sampling, alpha, beta);
-
+    cout << alpha << " " << beta << endl;
     if ((use_jastrow == false) && (use_coulomb == false)) {
         alpha = 1;
     }
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     Jastrow* jastrow;
 
     if (kinetics_type == "Num") {
-        h = 0.00001;
+        h = 0.0001;
         kinetics = new Numerical(n_p, dim, h);
     } else if (kinetics_type == "CF") {
         kinetics = new Closed_form(n_p, dim);

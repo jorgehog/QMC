@@ -27,7 +27,7 @@ Walker::Walker(int n_p, int dim) {
     spatial_grad = zeros<mat > (n_p, dim);
     value = 0;
     lapl_sum = 0;
-    ratio = 0;
+    slater_ratio = 0;
 
 }
 
@@ -96,8 +96,8 @@ bool Walker::check_bad_qforce() {
             }
         }
     }
-    
-    if (qforce_test > 100){
+ 
+    if (qforce_test > 1000){
         return true;
     } else {
         return false;
