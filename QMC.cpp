@@ -191,6 +191,18 @@ double VMC::get_var() const {
     return E2 - vmc_E*vmc_E;
 }
 
+double VMC::get_e2() const {
+    return E2;
+}
+
+void VMC::set_e(double E) {
+    vmc_E = E;
+}
+
+void VMC::set_e2(double E2) {
+    this->E2 = E2;
+}
+
 double VMC::get_energy() const {
     return vmc_E;
 }

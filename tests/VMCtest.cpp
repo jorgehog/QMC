@@ -4,22 +4,7 @@
  *
  * Created on 22.jun.2012, 12:52:55
  */
-#include <armadillo>
-
-#include "Diffusion.h"
-#include "Jastrow.h"
-#include "Kinetics.h"
-#include "Orbitals.h"
-#include "Potential.h"
-#include "QMC.h"
-#include "Sampling.h"
-#include "System.h"
-#include "Walker.h"
-#include <sys/time.h>
-#include "QMCInitializer.h"
-
-#include <stdlib.h>
-#include <iostream>
+#include "QMCheaders.h"
 
 /*
  * Simple C++ Test Suite

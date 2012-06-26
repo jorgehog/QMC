@@ -4,9 +4,10 @@
  *
  * Created on 13. april 2012, 17:04
  */
+
+#include "mpi.h"
 #include "QMCheaders.h"
 
-#include <iostream>
 #include <sys/time.h>
 using namespace std;
 
@@ -14,11 +15,17 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
-    int n_p, dim, n_c;
-    double alpha, beta, w, dt, h;
+    int n_p, dim, n_c, numprocs, my_rank;
+    double alpha, beta, w, dt, h, cumul_e, cumul_e2, e, e2;
     long random_seed;
 
-    random_seed = -time(NULL);
+    //initializing MPI
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+
+    random_seed = -time(NULL) - my_rank;
 
     n_p = 2;
     dim = 2;
@@ -93,11 +100,27 @@ int main(int argc, char** argv) {
 
 
 
-    QMC* vmc = new VMC(n_p, dim, n_c, jastrow, sample_method, SYSTEM, kinetics);
+    VMC* vmc = new VMC(n_p, dim, n_c, jastrow, sample_method, SYSTEM, kinetics);
 
     vmc->run_method();
-    vmc->output();
 
+    
+    cumul_e = cumul_e2 = 0;
+    e = vmc->get_energy();
+    e2 = vmc->get_e2();
+    
+    MPI_Reduce(&e, &cumul_e, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&e2, &cumul_e2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if (my_rank == 0) {
+        vmc->set_e(e);
+        vmc->set_e2(e2);
+        
+        vmc->output();
+    }
+
+
+    MPI_Finalize();
     return 0;
 }
 

@@ -30,8 +30,6 @@ private:
 public:
     oscillator_basis_HC(int n_p, int dim, double alpha, double w = 1.0);
     
-    //void set_frequency(double w);
-    
     virtual double phi(const Walker* walker, int particle, int q_num) const;
     virtual double del_phi(const Walker* walker, int particle, int q_num, int d) const;
     virtual double lapl_phi(const Walker* walker, int particle, int q_num) const;

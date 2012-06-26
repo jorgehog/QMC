@@ -91,6 +91,9 @@ public:
 
     double get_var() const;
     double get_energy() const;
+    double get_e2() const;
+    void set_e(double e);
+    void set_e2(double e2);
     
     virtual void run_method();
     virtual void output() const;
