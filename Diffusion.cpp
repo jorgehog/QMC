@@ -28,7 +28,7 @@ double Diffusion::call_RNG() {
     return ran3(&random_seed);
 }
 
-double Diffusion::get_new_pos(Walker* walker, int i, int j) {
+double Diffusion::get_new_pos(const Walker* walker, int i, int j) {
     return gaussian_deviate(&random_seed) * std;
 }
 
@@ -38,11 +38,11 @@ Simple::Simple(int n_p, int dim, double timestep, long random_seed, double D)
 
 }
 
-double Simple::get_new_pos(Walker* walker, int i, int j) {
+double Simple::get_new_pos(const Walker* walker, int i, int j) {
     return Diffusion::get_new_pos(walker, i, j);
 }
 
-double Simple::get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
+double Simple::get_g_ratio(const Walker* walker_post, const Walker* walker_pre, int particle) const{
     return 1;
 }
 
@@ -51,11 +51,11 @@ Fokker_Planck::Fokker_Planck(int n_p, int dim, double timestep, long random_seed
 
 }
 
-double Fokker_Planck::get_new_pos(Walker* walker, int i, int j) {
+double Fokker_Planck::get_new_pos(const Walker* walker, int i, int j) {
     return D * timestep * walker->qforce(i,j) + Diffusion::get_new_pos(walker, i, j);
 }
 
-double Fokker_Planck::get_g_ratio(Walker* walker_post, Walker* walker_pre, int particle) {
+double Fokker_Planck::get_g_ratio(const Walker* walker_post, const Walker* walker_pre, int particle) const{
 
     double g_ratio = 0;
     for (int j = 0; j < dim; j++) {

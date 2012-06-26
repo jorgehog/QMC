@@ -25,27 +25,27 @@ public:
 
     Kinetics(int n_p, int dim);
 
-    virtual double get_KE(Walker* walker) = 0;
+    virtual double get_KE(const Walker* walker) = 0;
     virtual void get_QF(Walker* walker) = 0;
 
-    virtual void get_necessities_IS(Walker* walker) = 0;
+    virtual void get_necessities_IS(Walker* walker) const= 0;
     //BF necessities are independent of kinetics
 
-    virtual void update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) = 0;
+    virtual void update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const= 0;
     //NOTHING TO UPDATE FOR BF
     
-    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle) = 0;
+    virtual double get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const= 0;
     //BF ratio is indep. of kinetics
 
-    virtual void calculate_energy_necessities(Walker* walker) = 0;
+    virtual void calculate_energy_necessities(Walker* walker) const= 0;
 
-    virtual void update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle) = 0;
+    virtual void update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const= 0;
     //NO BF NECESSITIES
 
-    virtual void copy_walker_IS(Walker* parent, Walker* child) = 0;
-    virtual void copy_walker_BF(Walker* parent, Walker* child) = 0;
+    virtual void copy_walker_IS(const Walker* parent, Walker* child) const= 0;
+    virtual void copy_walker_BF(const Walker* parent, Walker* child) const= 0;
 
-    virtual void reset_walker_IS(Walker* walker_pre, Walker* walker_post, int particle) = 0;
+    virtual void reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const= 0;
     //NOTHING TO RESET FOR BF
 
     void set_qmc_ptr(QMC* qmc) {
@@ -63,23 +63,23 @@ protected:
 public:
     Numerical(int n_p, int dim, double h = 0.0001);
 
-    virtual double get_KE(Walker* walker);
+    virtual double get_KE(const Walker* walker);
     virtual void get_QF(Walker* walker);
 
-    virtual void get_necessities_IS(Walker* walker);
+    virtual void get_necessities_IS(Walker* walker) const;
 
-    virtual void update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const;
 
-    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle);
+    virtual double get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const;
     
-    virtual void calculate_energy_necessities(Walker* walker);
+    virtual void calculate_energy_necessities(Walker* walker) const;
 
-    virtual void update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
-    virtual void copy_walker_IS(Walker* parent, Walker* child);
-    virtual void copy_walker_BF(Walker* parent, Walker* child);
+    virtual void copy_walker_IS(const Walker* parent, Walker* child) const;
+    virtual void copy_walker_BF(const Walker* parent, Walker* child) const;
 
-    virtual void reset_walker_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
 };
 
@@ -87,23 +87,23 @@ class Closed_form : public Kinetics {
 public:
     Closed_form(int n_p, int dim);
 
-    virtual double get_KE(Walker* walker);
+    virtual double get_KE(const Walker* walker);
     virtual void get_QF(Walker* walker);
 
-    virtual void get_necessities_IS(Walker* walker);
+    virtual void get_necessities_IS(Walker* walker) const;
 
-    virtual void update_walker_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const;
 
-    virtual void calculate_energy_necessities(Walker* walker);
+    virtual void calculate_energy_necessities(Walker* walker) const;
 
-    virtual double get_spatial_ratio_IS(Walker* walker_post, Walker* walker_pre, int particle);
+    virtual double get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const;
     
-    virtual void update_necessities_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
-    virtual void copy_walker_IS(Walker* parent, Walker* child);
-    virtual void copy_walker_BF(Walker* parent, Walker* child);
+    virtual void copy_walker_IS(const Walker* parent, Walker* child) const;
+    virtual void copy_walker_BF(const Walker* parent, Walker* child) const;
 
-    virtual void reset_walker_IS(Walker* walker_pre, Walker* walker_post, int particle);
+    virtual void reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
 };
 

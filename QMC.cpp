@@ -34,26 +34,28 @@ QMC::QMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System
 
 }
 
-void QMC::get_gradients(Walker* walker, int particle) {
+
+
+void QMC::get_gradients(Walker* walker, int particle) const {
     jastrow->get_grad(walker);
     system->get_spatial_grad(walker, particle);
 }
 
-void QMC::get_gradients(Walker* walker) {
+void QMC::get_gradients(Walker* walker) const {
     jastrow->get_grad(walker);
     system->get_spatial_grad(walker, 0);
     system->get_spatial_grad(walker, n2);
 }
 
-void QMC::get_laplsum(Walker* walker) {
+void QMC::get_laplsum(Walker* walker) const {
     walker->lapl_sum = system->get_spatial_lapl_sum(walker) + jastrow->get_lapl_sum(walker);
 }
 
-void QMC::get_wf_value(Walker* walker) {
+void QMC::get_wf_value(Walker* walker) const {
     walker->value = system->get_spatial_wf(walker) * jastrow->get_val(walker);
 }
 
-void QMC::update_pos(Walker* walker_pre, Walker* walker_post, int particle) {
+void QMC::update_pos(const Walker* walker_pre, Walker* walker_post, int particle) const {
 
     for (int j = 0; j < dim; j++) {
         walker_post->r(particle, j) = walker_pre->r(particle, j)
@@ -68,18 +70,18 @@ void QMC::update_pos(Walker* walker_pre, Walker* walker_post, int particle) {
     }
 }
 
-void QMC::update_necessities(Walker* walker_pre, Walker* walker_post, int particle) {
+void QMC::update_necessities(const Walker* walker_pre, Walker* walker_post, int particle) const {
     sampling->update_necessities(walker_pre, walker_post, particle);
 }
 
-double QMC::get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int particle) {
+double QMC::get_acceptance_ratio(const Walker* walker_pre, const Walker* walker_post, int particle) const {
     double spatial_jast = sampling->get_spatial_ratio(walker_post, walker_pre, particle);
     double G = sampling->get_g_ratio(walker_post, walker_pre, particle);
- 
+
     return spatial_jast * spatial_jast * G;
 }
 
-void QMC::calculate_energy_necessities(Walker* walker) {
+void QMC::calculate_energy_necessities(Walker* walker) const {
     kinetics->calculate_energy_necessities(walker);
 }
 
@@ -95,11 +97,11 @@ bool QMC::metropolis_test(double A) {
     }
 }
 
-void QMC::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+void QMC::update_walker(Walker* walker_pre, const Walker* walker_post, int particle) const {
     sampling->update_walker(walker_pre, walker_post, particle);
 }
 
-void QMC::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+void QMC::reset_walker(const Walker* walker_pre, Walker* walker_post, int particle) const {
     for (int i = 0; i < dim; i++) {
         walker_post->r(particle, i) = walker_pre->r(particle, i);
     }
@@ -111,7 +113,7 @@ void QMC::reset_walker(Walker* walker_pre, Walker* walker_post, int particle) {
     sampling->reset_walker(walker_pre, walker_post, particle);
 }
 
-void QMC::copy_walker(Walker* parent, Walker* child) {
+void QMC::copy_walker(const Walker* parent, Walker* child) const {
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
             child->r(i, j) = parent->r(i, j);
@@ -145,12 +147,12 @@ void VMC::initialize() {
     copy_walker(wfold, wfnew);
 }
 
-void VMC::calculate_energy(Walker* walker) {
+void VMC::calculate_energy(const Walker* walker) {
     double local_E;
 
     local_E = kinetics->get_KE(walker);
     local_E += system->get_potential_energy(walker);
-    
+
     vmc_E += local_E;
     E2 += local_E*local_E;
 }
@@ -188,16 +190,16 @@ void VMC::run_method() {
 
 }
 
-void VMC::output() {
-    std::cout << "VMC energy: " << vmc_E << std::endl;
-    std::cout << "VMC variance: " << E2 - vmc_E * vmc_E << std::endl;
+void VMC::output() const {
+    std::cout << "VMC energy: " << get_energy() << std::endl;
+    std::cout << "VMC variance: " << get_var() << std::endl;
     std::cout << "Acceptance ratio: " << accepted / (double) (n_c * n_p) << endl;
 }
 
-double VMC::get_var() {
+double VMC::get_var() const {
     return E2 - vmc_E*vmc_E;
 }
 
-double VMC::get_energy() {
+double VMC::get_energy() const {
     return vmc_E;
 }

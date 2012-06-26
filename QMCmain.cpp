@@ -13,10 +13,10 @@
 #include "Sampling.h"
 #include "System.h"
 #include "Walker.h"
-#include <sys/time.h>
-
 #include "QMCInitializer.h"
+
 #include <iostream>
+#include <sys/time.h>
 using namespace std;
 
 /*
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 
     random_seed = -time(NULL);
 
-    n_p = 6;
+    n_p = 2;
     dim = 2;
     w = 1;
 
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
 
     initVMC(n_p, dim, w, dt, system, sampling, alpha, beta);
-    cout << alpha << " " << beta << endl;
+    //cout << alpha << " " << beta << endl;
     if ((use_jastrow == false) && (use_coulomb == false)) {
         alpha = 1;
     }

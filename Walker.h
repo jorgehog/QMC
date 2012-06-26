@@ -37,13 +37,13 @@ public:
     
     double get_r_i2(int i) const;
     
-    double abs_relative(int i, int j);
+    double abs_relative(int i, int j) const;
 
     void make_rel_matrix();
     
-    bool is_singular();
+    bool is_singular() const;
     
-    bool check_bad_qforce();
+    bool check_bad_qforce() const;
 
 };
 

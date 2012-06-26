@@ -18,7 +18,7 @@ System::System(int n_p, int dim, Potential* pot, Orbitals* orbital) {
     this->orbital = orbital;
 }
 
-double System::get_potential_energy(Walker* walker) {
+double System::get_potential_energy(const Walker* walker) const {
     return pot->get_pot_E(walker);
 }
 
@@ -37,7 +37,7 @@ void Fermions::initialize(Walker* walker) {
 }
 
 
-void Fermions::get_spatial_grad(Walker* walker, int particle) {
+void Fermions::get_spatial_grad(Walker* walker, int particle) const {
     int i, j, k, start;
 
 
@@ -103,7 +103,7 @@ double Fermions::get_spatial_wf(const Walker* walker) {
     return get_det();
 }
 
-double Fermions::get_spatial_ratio(Walker* walker_pre, Walker* walker_post, int particle) {
+double Fermions::get_spatial_ratio(const Walker* walker_pre, const Walker* walker_post, int particle) const {
     int q_num;
     double s_ratio;
 
@@ -115,7 +115,7 @@ double Fermions::get_spatial_ratio(Walker* walker_pre, Walker* walker_post, int 
     return s_ratio;
 }
 
-void Fermions::update_inverse(Walker* walker_old, Walker* walker_new, int particle) {
+void Fermions::update_inverse(const Walker* walker_old, Walker* walker_new, int particle) const {
     int k, l, j, start;
     double sum;
 
@@ -140,11 +140,11 @@ void Fermions::update_inverse(Walker* walker_old, Walker* walker_new, int partic
     }
 }
 
-void Fermions::calc_for_newpos(Walker* walker_old, Walker* walker_new, int particle) {
+void Fermions::calc_for_newpos(const Walker* walker_old, Walker* walker_new, int particle) const {
     update_inverse(walker_old, walker_new, particle);
 }
 
-double Fermions::get_spatial_lapl_sum(const Walker* walker) {
+double Fermions::get_spatial_lapl_sum(const Walker* walker) const {
     int i, j;
     double sum;
 
@@ -158,7 +158,7 @@ double Fermions::get_spatial_lapl_sum(const Walker* walker) {
     return sum;
 }
 
-void Fermions::update_walker(Walker* walker_pre, Walker* walker_post, int particle) {
+void Fermions::update_walker(Walker* walker_pre, const Walker* walker_post, int particle) const {
     int start = n2 * (particle >= n2);
 
     //Reseting the parts with the same spin as the moved particle
@@ -169,7 +169,7 @@ void Fermions::update_walker(Walker* walker_pre, Walker* walker_post, int partic
     }
 }
 
-void Fermions::copy_walker(Walker* parent, Walker* child) {
+void Fermions::copy_walker(const Walker* parent, Walker* child) const {
     for (int i = 0; i < n2; i++) {
         for (int j = 0; j < n_p; j++) {
             child->inv(i, j) = parent->inv(i, j);
@@ -177,7 +177,7 @@ void Fermions::copy_walker(Walker* parent, Walker* child) {
     }
 }
 
-void Fermions::reset_walker_ISCF(Walker* walker_pre, Walker* walker_post, int particle) {
+void Fermions::reset_walker_ISCF(const Walker* walker_pre, Walker* walker_post, int particle) const {
 
     int start = n2 * (particle >= n2);
 

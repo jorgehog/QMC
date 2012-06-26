@@ -18,8 +18,8 @@ protected:
   
 public:
     Orbitals(int n_p, int dim);
-    virtual double phi(const Walker* walker, int particle, int q_num) = 0;
-    virtual double del_phi(const Walker* walker, int particle, int q_num, int d) = 0;
+    virtual double phi(const Walker* walker, int particle, int q_num) const = 0;
+    virtual double del_phi(const Walker* walker, int particle, int q_num, int d) const = 0;
     virtual double lapl_phi(const Walker* walker, int particle, int q_num) const = 0;
 
 };
@@ -34,8 +34,8 @@ public:
     
     //void set_frequency(double w);
     
-    virtual double phi(const Walker* walker, int particle, int q_num);
-    virtual double del_phi(const Walker* walker, int particle, int q_num, int d);
+    virtual double phi(const Walker* walker, int particle, int q_num) const;
+    virtual double del_phi(const Walker* walker, int particle, int q_num, int d) const;
     virtual double lapl_phi(const Walker* walker, int particle, int q_num) const;
 };
 

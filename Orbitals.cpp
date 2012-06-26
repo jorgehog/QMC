@@ -25,7 +25,7 @@ oscillator_basis_HC::oscillator_basis_HC(int n_p, int dim, double alpha, double 
 }
 
 
-double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) {
+double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) const{
     double r2, H, x, y;
 
     r2 = walker->get_r_i2(particle);
@@ -70,7 +70,7 @@ double oscillator_basis_HC::phi(const Walker* walker, int particle, int q_num) {
     return H * exp(-0.5 * alpha * w * r2);
 }
 
-double oscillator_basis_HC::del_phi(const Walker* walker, int particle, int q_num, int d) {
+double oscillator_basis_HC::del_phi(const Walker* walker, int particle, int q_num, int d) const{
     double r2, H, x, y;
 
     r2 = walker->get_r_i2(particle);

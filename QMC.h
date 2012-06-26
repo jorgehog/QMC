@@ -36,32 +36,31 @@ protected:
     QMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics);
 
 
-
     virtual void initialize() = 0;
 
 
 
-    void update_pos(Walker* walker_pre, Walker*walker_post, int particle);
-    void update_necessities(Walker* walker_pre, Walker* walker_post, int particle);
-    double get_acceptance_ratio(Walker* walker_pre, Walker* walker_post, int particle);
+    void update_pos(const Walker* walker_pre, Walker*walker_post, int particle) const;
+    void update_necessities(const Walker* walker_pre, Walker* walker_post, int particle) const;
+    double get_acceptance_ratio(const Walker* walker_pre, const Walker* walker_post, int particle) const;
 
-    void calculate_energy_necessities(Walker* walker);
+    void calculate_energy_necessities(Walker* walker) const;
 
     bool metropolis_test(double A);
-    void update_walker(Walker*walker_pre, Walker* walker_post, int particle);
-    void reset_walker(Walker* walker_pre, Walker* walker_post, int particle);
+    void update_walker(Walker*walker_pre, const Walker* walker_post, int particle) const;
+    void reset_walker(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
-    void copy_walker(Walker* parent, Walker* child);
+    void copy_walker(const Walker* parent, Walker* child) const;
 
 public:
     
     virtual void run_method() = 0;
-    virtual void output() = 0;
+    virtual void output() const = 0;
     
-    void get_gradients(Walker* walker, int particle);
-    void get_gradients(Walker* walker);
-    void get_wf_value(Walker* walker);
-    void get_laplsum(Walker* walker);
+    void get_gradients(Walker* walker, int particle) const;
+    void get_gradients(Walker* walker) const;
+    void get_wf_value(Walker* walker) const;
+    void get_laplsum(Walker* walker) const;
 
 
     System* get_system_ptr() {
@@ -88,7 +87,7 @@ protected:
     bool dist_to_file;
 
     virtual void initialize();
-    void calculate_energy(Walker* walker);
+    void calculate_energy(const Walker* walker);
     void scale_values();
 
 public:
@@ -100,11 +99,11 @@ public:
     Walker* wfold;
     Walker* wfnew;
 
-    double get_var();
-    double get_energy();
+    double get_var() const;
+    double get_energy() const;
     
     virtual void run_method();
-    virtual void output();
+    virtual void output() const;
 
 };
 

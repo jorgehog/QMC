@@ -31,7 +31,7 @@ Walker::Walker(int n_p, int dim) {
 
 }
 
-double Walker::abs_relative(int i, int j) {
+double Walker::abs_relative(int i, int j) const{
     int k;
     double r_ij, tmp;
 
@@ -68,7 +68,7 @@ void Walker::make_rel_matrix() {
     }
 }
 
-bool Walker::is_singular() {
+bool Walker::is_singular() const{
     int i, j;
     double eps;
 
@@ -85,7 +85,7 @@ bool Walker::is_singular() {
     return false;
 }
 
-bool Walker::check_bad_qforce() {
+bool Walker::check_bad_qforce() const{
     double qforce_test = 0;
     
     for (int i = 0; i < n_p; i++) {

@@ -61,7 +61,7 @@ void Pade_Jastrow::initialize() {
     }
 }
 
-double Pade_Jastrow::get_val(Walker* walker) {
+double Pade_Jastrow::get_val(const Walker* walker) const{
     int i, j;
     double arg;
 
@@ -75,7 +75,7 @@ double Pade_Jastrow::get_val(Walker* walker) {
     return exp(arg);
 }
 
-void Pade_Jastrow::get_grad(Walker* walker) {
+void Pade_Jastrow::get_grad(Walker* walker) const{
     int i, j, k;
     double b_ij, deriv;
 
@@ -97,7 +97,7 @@ void Pade_Jastrow::get_grad(Walker* walker) {
 
 }
 
-double Pade_Jastrow::get_j_ratio(Walker* walker_new, Walker* walker_old, int i) {
+double Pade_Jastrow::get_j_ratio(const Walker* walker_new, const Walker* walker_old, int i) const{
     int j;
     double j_ratio;
 
@@ -106,6 +106,7 @@ double Pade_Jastrow::get_j_ratio(Walker* walker_new, Walker* walker_old, int i) 
         j_ratio += a(i,j) * (walker_new->r_rel(i,j) / (1.0 + beta * walker_new->r_rel(i,j)) -
                 walker_old->r_rel(i,j) / (1.0 + beta * walker_old->r_rel(i,j)));
     }
+
 
     return exp(j_ratio);
 }
