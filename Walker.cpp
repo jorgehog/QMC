@@ -5,10 +5,8 @@
  * Created on 30. mars 2012, 16:50
  */
 
-#include <math.h>
+#include "QMCheaders.h"
 
-#include "Walker.h"
-#include "lib.h"
 using namespace arma;
 
 Walker::Walker(int n_p, int dim) {

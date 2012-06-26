@@ -5,10 +5,7 @@
  * Created on 30. mars 2012, 16:49
  */
 
-#include "System.h"
-#include "Jastrow.h"
-#include "Walker.h"
-#include "Potential.h"
+#include "QMCheaders.h"
 
 System::System(int n_p, int dim, Potential* pot, Orbitals* orbital) {
     this->n_p = n_p;

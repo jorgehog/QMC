@@ -8,15 +8,6 @@
 #ifndef SAMPLING_H
 #define	SAMPLING_H
 
-#include <fstream>
-
-#include "Diffusion.h"
-#include "Walker.h"
-#include "QMC.h"
-#include "System.h"
-
-class QMC;
-
 class Sampling {
 protected:
     int n_p;

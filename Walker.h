@@ -8,8 +8,6 @@
 #ifndef WALKER_H
 #define	WALKER_H
 
-#include <armadillo>
-
 using namespace arma;
 
 class Walker {

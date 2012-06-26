@@ -8,11 +8,6 @@
 #ifndef SYSTEM_H
 #define	SYSTEM_H
 
-#include "Potential.h"
-#include "Walker.h"
-#include "Orbitals.h"
-#include <armadillo>
-
 class System {
 protected:
     int n_p;

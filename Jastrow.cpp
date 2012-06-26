@@ -5,12 +5,7 @@
  * Created on 30. mars 2012, 16:52
  */
 
-#include <iostream> 
-
-#include "Jastrow.h"
-#include "Sampling.h"
-#include "math.h"
-#include "lib.h"
+#include "QMCheaders.h"
 
 Jastrow::Jastrow(int n_p, int dim) {
     this->n_p = n_p;

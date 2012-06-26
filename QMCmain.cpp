@@ -4,16 +4,7 @@
  *
  * Created on 13. april 2012, 17:04
  */
-#include "Diffusion.h"
-#include "Jastrow.h"
-#include "Kinetics.h"
-#include "Orbitals.h"
-#include "Potential.h"
-#include "QMC.h"
-#include "Sampling.h"
-#include "System.h"
-#include "Walker.h"
-#include "QMCInitializer.h"
+#include "QMCheaders.h"
 
 #include <iostream>
 #include <sys/time.h>

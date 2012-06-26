@@ -8,16 +8,6 @@
 #ifndef QMC_H
 #define	QMC_H
 
-#include "Walker.h"
-#include "Sampling.h"
-#include "Kinetics.h"
-#include "Jastrow.h"
-
-class Jastrow;
-class Sampling;
-class System;
-class Kinetics;
-
 class QMC {
 protected:
     int n_c;

@@ -12,6 +12,7 @@
       <itemPath>Potential.h</itemPath>
       <itemPath>QMC.h</itemPath>
       <itemPath>QMCInitializer.h</itemPath>
+      <itemPath>QMCheaders.h</itemPath>
       <itemPath>Sampling.h</itemPath>
       <itemPath>System.h</itemPath>
       <itemPath>Walker.h</itemPath>

@@ -8,8 +8,6 @@
 #ifndef ORBITALS_H
 #define	ORBITALS_H
 
-#include "Walker.h"
-
 class Orbitals {
 protected:
     int n_p;

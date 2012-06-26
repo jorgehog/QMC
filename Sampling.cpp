@@ -5,8 +5,8 @@
  * Created on 15. juni 2012, 18:44
  */
 
-#include "Sampling.h"
-#include <iostream>
+#include "QMCheaders.h"
+
 using namespace std;
 
 Sampling::Sampling(int n_p, int dim) {

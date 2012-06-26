@@ -5,8 +5,7 @@
  * Created on 13. april 2012, 17:21
  */
 
-#include "Potential.h"
-//completed
+#include "QMCheaders.h"
 
 Potential::Potential(int n_p, int dim, bool coulomb_on) {
 

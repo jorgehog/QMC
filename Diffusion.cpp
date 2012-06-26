@@ -5,14 +5,7 @@
  * Created on 16. april 2012, 14:03
  */
 
-#include <math.h>
-
-#include "Diffusion.h"
-#include "Sampling.h"
-
-#include "lib.h"
-
-//METROPOLIS maa ha elsetest som setter blokken med spin motsatt av neste bevegede partikkels spin lik gamle.
+#include "QMCheaders.h"
 
 Diffusion::Diffusion(int n_p, int dim, double timestep, long random_seed, double D) {
     this->n_p = n_p;

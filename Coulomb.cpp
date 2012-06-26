@@ -5,7 +5,7 @@
  * Created on 20. juni 2012, 15:29
  */
 
-#include "Coulomb.h"
+#include "QMCheaders.h"
 
 Coulomb::Coulomb(int n_p, int dim) {
     this->n_p = n_p;

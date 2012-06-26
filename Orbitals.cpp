@@ -5,12 +5,7 @@
  * Created on 13. april 2012, 22:33
  */
 
-#include <iostream>
-#include <math.h>
-
-#include "Orbitals.h"
-
-//ferdig
+#include "QMCheaders.h"
 
 Orbitals::Orbitals(int n_p, int dim) {
     this->n_p = n_p;

@@ -8,9 +8,6 @@
 #ifndef JASTROW_H
 #define	JASTROW_H
 
-#include "Walker.h"
-#include <armadillo>
-
 class Jastrow {
 protected:
     int n_p;
@@ -27,7 +24,6 @@ public:
     virtual double get_val(const Walker* walker) const = 0;
     virtual double get_j_ratio(const Walker* walker_new, const Walker* walker_old, int i) const = 0;
     virtual void get_grad(Walker* walker) const = 0;
-    //void get_grad(Walker* walker); In walker
     virtual double get_lapl_sum(const Walker* walker) const = 0;
 
 };

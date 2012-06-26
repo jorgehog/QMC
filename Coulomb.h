@@ -8,8 +8,6 @@
 #ifndef COULOMB_H
 #define	COULOMB_H
 
-#include "Walker.h"
-
 class Coulomb {
 public:
     int n_p;

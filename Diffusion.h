@@ -8,10 +8,6 @@
 #ifndef DIFFUSION_H
 #define	DIFFUSION_H
 
-#include <fstream>
-
-class Walker;
-
 class Diffusion {
 protected:
     int n_p;

@@ -5,13 +5,9 @@
  * Created on 13. april 2012, 17:45
  */
 
-#include <iostream>
-using namespace std;
+#include "QMCheaders.h"
 
-#include "Kinetics.h"
-#include "System.h"
-#include "QMC.h"
-#include "Walker.h"
+using namespace std;
 
 Kinetics::Kinetics(int n_p, int dim) {
     this->n_p = n_p;

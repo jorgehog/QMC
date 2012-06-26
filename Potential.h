@@ -8,9 +8,6 @@
 #ifndef POTENTIAL_H
 #define	POTENTIAL_H
 
-#include "Walker.h"
-#include "Coulomb.h"
-
 class Potential {
 public:
     Potential(int n_p, int dim, bool coulomb_on);

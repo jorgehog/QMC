@@ -5,16 +5,7 @@
  * Created on 30. mars 2012, 17:42
  */
 
-#include "QMC.h"
-#include "System.h"
-#include "Jastrow.h"
-#include "Diffusion.h"
-#include "Kinetics.h"
-#include "Walker.h"
-#include "Sampling.h"
-#include "lib.h"
-
-#include <iostream>
+#include "QMCheaders.h"
 
 QMC::QMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics) {
     this->n_p = n_p;

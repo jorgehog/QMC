@@ -8,10 +8,6 @@
 #ifndef KINETICS_H
 #define	KINETICS_H
 
-
-class Walker;
-class QMC;
-
 class Kinetics {
 protected:
     int n_p;
