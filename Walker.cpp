@@ -29,7 +29,7 @@ Walker::Walker(int n_p, int dim) {
 
 }
 
-double Walker::abs_relative(int i, int j) const{
+double Walker::abs_relative(int i, int j) const {
     int k;
     double r_ij, tmp;
 
@@ -66,7 +66,7 @@ void Walker::make_rel_matrix() {
     }
 }
 
-bool Walker::is_singular() const{
+bool Walker::is_singular() const {
     int i, j;
     double eps;
 
@@ -83,22 +83,23 @@ bool Walker::is_singular() const{
     return false;
 }
 
-bool Walker::check_bad_qforce() const{
+bool Walker::check_bad_qforce() const {
     double qforce_test = 0;
-    
+
     for (int i = 0; i < n_p; i++) {
         for (int j = 0; j < dim; j++) {
-            double tmp = qforce(i, j); 
-            if (tmp*tmp > qforce_test) {
+            double tmp = qforce(i, j);
+            if (tmp * tmp > qforce_test) {
                 qforce_test = tmp*tmp;
             }
         }
     }
- 
-    if (qforce_test > 1000){
+
+    //expression from regression table
+    if (qforce_test > (500 * n_p - 6000)*(n_p >= 12) + 1000) {
         return true;
     } else {
         return false;
     }
-    
+
 }

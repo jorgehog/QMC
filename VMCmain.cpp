@@ -5,7 +5,7 @@
  * Created on 13. april 2012, 17:04
  */
 
-//#include "mpi.h"
+#include "mpi.h"
 #include "QMCheaders.h"
 
 #include <sys/time.h>
@@ -20,13 +20,13 @@ int main(int argc, char** argv) {
     long random_seed;
 
     //initializing MPI
-//    MPI_Init(&argc, &argv);
-//    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-//    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
 
     random_seed = -1.234;//-time(NULL);
-//    random_seed = -time(NULL) - my_rank;
+    random_seed = -time(NULL) - my_rank;
 
     n_p = 30;
     dim = 2;
@@ -106,22 +106,22 @@ int main(int argc, char** argv) {
     vmc->run_method();
 
     
-//    cumul_e = cumul_e2 = 0;
-//    e = vmc->get_energy();
-//    e2 = vmc->get_e2();
-//    
-//    MPI_Reduce(&e, &cumul_e, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-//    MPI_Reduce(&e2, &cumul_e2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-//
-//    if (my_rank == 0) {
-//        vmc->set_e(e);
-//        vmc->set_e2(e2);
-//        
-//        vmc->output();
-//    }
-    vmc->output();
+    cumul_e = cumul_e2 = 0;
+    e = vmc->get_energy();
+    e2 = vmc->get_e2();
+    
+    MPI_Reduce(&e, &cumul_e, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&e2, &cumul_e2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-//    MPI_Finalize();
+    if (my_rank == 0) {
+        vmc->set_e(e);
+        vmc->set_e2(e2);
+        
+        vmc->output();
+    }
+//    vmc->output();
+
+    MPI_Finalize();
     return 0;
 }
 

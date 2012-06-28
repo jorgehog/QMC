@@ -1,5 +1,5 @@
 /* 
- * File:   Orbitals.cpp
+ * File:   Orbitals_old.cpp
  * Author: Jørgen
  * 
  * Created on 13. april 2012, 22:33
@@ -7,13 +7,13 @@
 
 #include "QMCheaders.h"
 
-Orbitals::Orbitals(int n_p, int dim) {
+Orbitals_old::Orbitals_old(int n_p, int dim) {
     this->n_p = n_p;
     this->dim = dim;
 }
 
 oscillator_basis_HC::oscillator_basis_HC(int n_p, int dim, double alpha, double w)
-: Orbitals(n_p, dim) {
+: Orbitals_old(n_p, dim) {
 
     this->alpha = alpha;
     this->w = w;

@@ -25,8 +25,6 @@ QMC::QMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System
 
 }
 
-
-
 void QMC::get_gradients(Walker* walker, int particle) const {
     jastrow->get_grad(walker);
     system->get_spatial_grad(walker, particle);
@@ -120,6 +118,15 @@ void QMC::copy_walker(const Walker* parent, Walker* child) const {
 
 }
 
+
+/*
+ 
+ 
+ VMC
+ 
+ 
+ */
+
 VMC::VMC(int n_p, int dim, int n_c, Jastrow *jastrow, Sampling *sampling, System *system, Kinetics *kinetics, bool dist_to_file)
 : QMC(n_p, dim, n_c, jastrow, sampling, system, kinetics) {
 
@@ -156,13 +163,13 @@ void VMC::scale_values() {
 void VMC::run_method() {
 
     initialize();
-
+    
     for (int cycle = 0; cycle < n_c; cycle++) {
         for (int particle = 0; particle < n_p; particle++) {
 
             update_pos(wfold, wfnew, particle);
             update_necessities(wfold, wfnew, particle);
-
+            
             double A = get_acceptance_ratio(wfold, wfnew, particle);
 
             if (metropolis_test(A)) {
@@ -206,3 +213,13 @@ void VMC::set_e2(double E2) {
 double VMC::get_energy() const {
     return vmc_E;
 }
+
+
+
+/*
+ 
+ 
+DMC 
+ 
+ 
+ */

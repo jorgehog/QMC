@@ -9,6 +9,7 @@
       <itemPath>Jastrow.h</itemPath>
       <itemPath>Kinetics.h</itemPath>
       <itemPath>Orbitals.h</itemPath>
+      <itemPath>OrbitalsOO.h</itemPath>
       <itemPath>Potential.h</itemPath>
       <itemPath>QMC.h</itemPath>
       <itemPath>QMCInitializer.h</itemPath>
@@ -16,6 +17,7 @@
       <itemPath>Sampling.h</itemPath>
       <itemPath>System.h</itemPath>
       <itemPath>Walker.h</itemPath>
+      <itemPath>function.h</itemPath>
       <itemPath>lib.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -26,12 +28,14 @@
       <itemPath>Jastrow.cpp</itemPath>
       <itemPath>Kinetics.cpp</itemPath>
       <itemPath>Orbitals.cpp</itemPath>
+      <itemPath>OrbitalsOO.cpp</itemPath>
       <itemPath>Potential.cpp</itemPath>
       <itemPath>QMC.cpp</itemPath>
       <itemPath>QMCInitializer.cpp</itemPath>
       <itemPath>Sampling.cpp</itemPath>
       <itemPath>System.cpp</itemPath>
       <itemPath>Walker.cpp</itemPath>
+      <itemPath>functions.cpp</itemPath>
       <itemPath>lib.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
@@ -62,11 +66,11 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>MPI|GNU</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
       </toolsSet>
       <compileType>
         <ccTool>
-          <commandlineTool>mpicxx</commandlineTool>
+          <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../../../programmer/Armadillo/include</pElem>
           </incDir>

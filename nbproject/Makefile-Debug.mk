@@ -15,13 +15,13 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=mpicxx
-CXX=mpicxx
+CCC=g++
+CXX=g++
 FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=MPI-Linux-x86
+CND_PLATFORM=GNU-Linux-x86
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -43,9 +43,11 @@ OBJECTFILES= \
 	${OBJECTDIR}/Kinetics.o \
 	${OBJECTDIR}/Coulomb.o \
 	${OBJECTDIR}/Sampling.o \
+	${OBJECTDIR}/OrbitalsOO.o \
 	${OBJECTDIR}/lib.o \
-	${OBJECTDIR}/System.o \
+	${OBJECTDIR}/functions.o \
 	${OBJECTDIR}/Diffusion.o \
+	${OBJECTDIR}/System.o \
 	${OBJECTDIR}/Jastrow.o
 
 # Test Directory
@@ -124,20 +126,30 @@ ${OBJECTDIR}/Sampling.o: Sampling.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sampling.o Sampling.cpp
 
+${OBJECTDIR}/OrbitalsOO.o: OrbitalsOO.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/OrbitalsOO.o OrbitalsOO.cpp
+
 ${OBJECTDIR}/lib.o: lib.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/lib.o lib.cpp
 
-${OBJECTDIR}/System.o: System.cpp 
+${OBJECTDIR}/functions.o: functions.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/System.o System.cpp
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/functions.o functions.cpp
 
 ${OBJECTDIR}/Diffusion.o: Diffusion.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion.o Diffusion.cpp
+
+${OBJECTDIR}/System.o: System.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -I../../../programmer/Armadillo/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/System.o System.cpp
 
 ${OBJECTDIR}/Jastrow.o: Jastrow.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -277,6 +289,19 @@ ${OBJECTDIR}/Sampling_nomain.o: ${OBJECTDIR}/Sampling.o Sampling.cpp
 	    ${CP} ${OBJECTDIR}/Sampling.o ${OBJECTDIR}/Sampling_nomain.o;\
 	fi
 
+${OBJECTDIR}/OrbitalsOO_nomain.o: ${OBJECTDIR}/OrbitalsOO.o OrbitalsOO.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/OrbitalsOO.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/OrbitalsOO_nomain.o OrbitalsOO.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/OrbitalsOO.o ${OBJECTDIR}/OrbitalsOO_nomain.o;\
+	fi
+
 ${OBJECTDIR}/lib_nomain.o: ${OBJECTDIR}/lib.o lib.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/lib.o`; \
@@ -290,17 +315,17 @@ ${OBJECTDIR}/lib_nomain.o: ${OBJECTDIR}/lib.o lib.cpp
 	    ${CP} ${OBJECTDIR}/lib.o ${OBJECTDIR}/lib_nomain.o;\
 	fi
 
-${OBJECTDIR}/System_nomain.o: ${OBJECTDIR}/System.o System.cpp 
+${OBJECTDIR}/functions_nomain.o: ${OBJECTDIR}/functions.o functions.cpp 
 	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/System.o`; \
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/functions.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/System_nomain.o System.cpp;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/functions_nomain.o functions.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/System.o ${OBJECTDIR}/System_nomain.o;\
+	    ${CP} ${OBJECTDIR}/functions.o ${OBJECTDIR}/functions_nomain.o;\
 	fi
 
 ${OBJECTDIR}/Diffusion_nomain.o: ${OBJECTDIR}/Diffusion.o Diffusion.cpp 
@@ -314,6 +339,19 @@ ${OBJECTDIR}/Diffusion_nomain.o: ${OBJECTDIR}/Diffusion.o Diffusion.cpp
 	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Diffusion_nomain.o Diffusion.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Diffusion.o ${OBJECTDIR}/Diffusion_nomain.o;\
+	fi
+
+${OBJECTDIR}/System_nomain.o: ${OBJECTDIR}/System.o System.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/System.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -g -I../../../programmer/Armadillo/include -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/System_nomain.o System.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/System.o ${OBJECTDIR}/System_nomain.o;\
 	fi
 
 ${OBJECTDIR}/Jastrow_nomain.o: ${OBJECTDIR}/Jastrow.o Jastrow.cpp 

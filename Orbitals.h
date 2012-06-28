@@ -1,28 +1,28 @@
 /* 
- * File:   Orbitals.h
+ * File:   Orbitals_old_old.h
  * Author: Jørgen
  *
  * Created on 13. april 2012, 22:33
  */
 
-#ifndef ORBITALS_H
-#define	ORBITALS_H
+#ifndef Orbitals_old_H
+#define	Orbitals_old_H
 
-class Orbitals {
+class Orbitals_old {
 protected:
     int n_p;
     int n2;
     int dim;
   
 public:
-    Orbitals(int n_p, int dim);
+    Orbitals_old(int n_p, int dim);
     virtual double phi(const Walker* walker, int particle, int q_num) const = 0;
     virtual double del_phi(const Walker* walker, int particle, int q_num, int d) const = 0;
     virtual double lapl_phi(const Walker* walker, int particle, int q_num) const = 0;
 
 };
 
-class oscillator_basis_HC : public Orbitals {
+class oscillator_basis_HC : public Orbitals_old {
 private:
     double alpha;
     double w;
@@ -37,5 +37,5 @@ public:
 
 
 
-#endif	/* ORBITALS_H */
+#endif	/* Orbitals_old_H */
 

@@ -17,6 +17,10 @@
 #include "lib.h"
 
 #include "Walker.h"
+
+#include "function.h"
+#include "OrbitalsOO.h"
+
 #include "Orbitals.h"
 #include "Coulomb.h"
 #include "Potential.h"

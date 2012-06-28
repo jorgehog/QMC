@@ -33,22 +33,20 @@ void Fermions::initialize(Walker* walker) {
     make_merged_inv(walker);
 }
 
-
 void Fermions::get_spatial_grad(Walker* walker, int particle) const {
     int i, j, k, start;
 
 
     start = n2 * (particle >= n2);
 
+    walker->spatial_grad(span(start, start + n2 -1 ), span(0, dim-1)) = arma::zeros<mat>(n2, dim);
+
     //updating the part with the same spin as the moved particle
     for (i = start; i < n2 + start; i++) {
-        for (k = 0; k < dim; k++) {
-            walker->spatial_grad(i, k) = 0;
-
-            for (j = 0; j < n2; j++) {
+        for (j = 0; j < n2; j++) {
+            for (k = 0; k < dim; k++) {
                 walker->spatial_grad(i, k) += orbital->del_phi(walker, i, j, k) * walker->inv(j, i);
             }
-
         }
     }
 }
@@ -62,17 +60,13 @@ void Fermions::initialize_slaters(const Walker* walker) {
             s_down(i, q_num) = orbital->phi(walker, i + n2, q_num);
         }
     }
-    
-//    cout <<"UP"<< s_down*walker->inv(span(0,2), span(3,5)) << endl;
-//    cout <<"DOWN"<< s_up*walker->inv(span(0,2),span(0,2)) << endl;
+
+    //    cout <<"UP"<< s_down*walker->inv(span(0,2), span(3,5)) << endl;
+    //    cout <<"DOWN"<< s_up*walker->inv(span(0,2),span(0,2)) << endl;
 }
 
 double Fermions::get_det() {
     return arma::det(s_up) * arma::det(s_down);
-    //    double sign1, sign2, ldet1, ldet2;
-    //    arma::log_det(ldet1, sign1, s_up);
-    //    arma::log_det(ldet2, sign2, s_down);
-    //    return sign1*sign2*exp(ldet1 + ldet2);
 }
 
 void Fermions::invert_slaters() {
@@ -82,7 +76,7 @@ void Fermions::invert_slaters() {
 
 void Fermions::make_merged_inv(Walker* walker) {
     int i, j;
-    
+
     initialize_slaters(walker);
     invert_slaters();
 
@@ -181,7 +175,7 @@ void Fermions::reset_walker_ISCF(const Walker* walker_pre, Walker* walker_post, 
     //Reseting the part of the inverse with the same spin as particle i
     for (int i = 0; i < n2; i++) {
         for (int j = start; j < n2 + start; j++) {
-            walker_post->inv(i,j) = walker_pre->inv(i,j); 
+            walker_post->inv(i, j) = walker_pre->inv(i, j);
         }
     }
 }
