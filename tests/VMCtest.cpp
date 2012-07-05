@@ -56,7 +56,7 @@ void test_nocol_nojast() {
             n_p = NP(i);
             w = W(j);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w, false);
 
@@ -154,7 +154,7 @@ void test_col_jast_num() {
 
             initVMC(n_p, dim, w, dt, "QDots", "BF", alpha, beta);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w);
             jastrow = new Pade_Jastrow(n_p, dim, beta);
@@ -245,7 +245,7 @@ void test_col_jast_CF() {
 
             initVMC(n_p, dim, w, dt, "QDots", "BF", alpha, beta);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w);
 
@@ -329,7 +329,7 @@ void test_ISnum_nocoljast() {
             n_p = NP(i);
             w = W(j);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w, false);
 
@@ -424,7 +424,7 @@ void test_ISnum() {
 
             initVMC(n_p, dim, w, dt, "QDots", "IS", alpha, beta);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w);
 
@@ -515,7 +515,7 @@ void test_ISCF() {
 
             initVMC(n_p, dim, w, dt, "QDots", "IS", alpha, beta);
 
-            HO_basis = new oscillator_basis_HC(n_p, dim, alpha, w);
+            HO_basis = new oscillator_basis(n_p, dim, alpha, w);
 
             HO_pot = new Harmonic_osc(n_p, dim, w);
 

@@ -161,11 +161,7 @@ void Fermions::update_walker(Walker* walker_pre, const Walker* walker_post, int 
 }
 
 void Fermions::copy_walker(const Walker* parent, Walker* child) const {
-    for (int i = 0; i < n2; i++) {
-        for (int j = 0; j < n_p; j++) {
-            child->inv(i, j) = parent->inv(i, j);
-        }
-    }
+    child->inv = parent->inv;
 }
 
 void Fermions::reset_walker_ISCF(const Walker* walker_pre, Walker* walker_post, int particle) const {

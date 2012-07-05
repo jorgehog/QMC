@@ -9,23 +9,28 @@
 
 using namespace arma;
 
-Walker::Walker(int n_p, int dim) {
+Walker::Walker(int n_p, int dim, bool do_init) {
     this->dim = dim;
     this->n_p = n_p;
     this->n2 = n_p / 2;
 
 
+    if (do_init) {
+        r = zeros<mat > (n_p, dim);
+        r_rel = zeros<mat > (n_p, n_p);
+        qforce = zeros<mat > (n_p, dim);
+        inv = zeros<mat > (n2, n_p);
+        jast_grad = zeros<mat > (n_p, dim);
+        spatial_grad = zeros<mat > (n_p, dim);
+        value = 0;
+        lapl_sum = 0;
+        slater_ratio = 0;
 
-    //need memory optimization for BF? Nah..
-    r = zeros<mat > (n_p, dim);
-    r_rel = zeros<mat > (n_p, n_p);
-    qforce = zeros<mat > (n_p, dim);
-    inv = zeros<mat > (n2, n_p);
-    jast_grad = zeros<mat > (n_p, dim);
-    spatial_grad = zeros<mat > (n_p, dim);
-    value = 0;
-    lapl_sum = 0;
-    slater_ratio = 0;
+
+        is_murdered = false;
+    } else {
+        is_murdered = true;
+    }
 
 }
 

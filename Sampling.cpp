@@ -58,6 +58,10 @@ void Sampling::update_walker(Walker* walker_pre, const Walker* walker_post, int 
     }
 }
 
+double Sampling::get_branching_Gfunc(Walker* walker_pre, Walker* walker_post, double E_T) const {
+    return diffusion->get_GBfunc(walker_pre, walker_post, E_T);
+}
+
 Brute_Force::Brute_Force(int n_p, int dim, double timestep, long random_seed, double D) : Sampling(n_p, dim) {
     is_importance = false;
     diffusion = new Simple(n_p, dim, timestep, random_seed, D);
@@ -104,6 +108,8 @@ void Importance::calculate_energy_necessities_CF(Walker* walker) const {
 
 void Importance::copy_walker(const Walker* parent, Walker* child) const {
     qmc->get_kinetics_ptr()->copy_walker_IS(parent, child);
+
+    child->qforce = parent->qforce;
 }
 
 void Importance::update_necessities(const Walker* walker_pre, Walker* walker_post, int particle) const {
@@ -138,3 +144,5 @@ void Importance::get_necessities(Walker* walker) const {
         Sampling::set_trial_pos(walker);
     }
 }
+
+

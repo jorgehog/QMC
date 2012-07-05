@@ -105,36 +105,35 @@ void Numerical::get_QF(Walker* walker) {
     }
 }
 
-void Numerical::get_necessities_IS(Walker* walker) const{
+void Numerical::get_necessities_IS(Walker* walker) const {
     qmc->get_wf_value(walker);
 }
 
-void Numerical::update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const{
+void Numerical::update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const {
     qmc->get_wf_value(walker_post);
 }
 
-
-void Numerical::calculate_energy_necessities(Walker* walker) const{
+void Numerical::calculate_energy_necessities(Walker* walker) const {
     //No necessities.
 }
 
-double Numerical::get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const{
-    return walker_post->value/walker_pre->value;
+double Numerical::get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const {
+    return walker_post->value / walker_pre->value;
 }
 
-void Numerical::update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const{
+void Numerical::update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const {
     walker_pre->value = walker_post->value;
 }
 
-void Numerical::copy_walker_BF(const Walker* parent, Walker* child) const{
+void Numerical::copy_walker_BF(const Walker* parent, Walker* child) const {
     child->value = parent->value;
 }
 
-void Numerical::copy_walker_IS(const Walker* parent, Walker* child) const{
-    qmc->get_system_ptr()->copy_walker(parent, child);
+void Numerical::copy_walker_IS(const Walker* parent, Walker* child) const {
+    //nothing to copy. Might need for DMC IS
 }
 
-void Numerical::reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const{
+void Numerical::reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const {
     //Nothing to reset;
 }
 
@@ -143,11 +142,11 @@ Closed_form::Closed_form(int n_p, int dim)
 
 }
 
-void Closed_form::update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const{
+void Closed_form::update_walker_IS(Walker* walker_pre, const Walker* walker_post, int particle) const {
     int start = n2 * (particle >= n2);
 
     qmc->get_system_ptr()->update_walker(walker_pre, walker_post, particle);
-    
+
     for (int i = start; i < start + n2; i++) {
         for (int j = 0; j < dim; j++) {
             walker_pre->spatial_grad(i, j) = walker_post->spatial_grad(i, j);
@@ -192,52 +191,47 @@ void Closed_form::get_QF(Walker* walker) {
     }
 }
 
-double Closed_form::get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const{
-    return walker_post->slater_ratio*qmc->get_jastrow_ptr()->get_j_ratio(walker_post, walker_pre, particle);
+double Closed_form::get_spatial_ratio_IS(const Walker* walker_post, const Walker* walker_pre, int particle) const {
+    return walker_post->slater_ratio * qmc->get_jastrow_ptr()->get_j_ratio(walker_post, walker_pre, particle);
 }
 
-void Closed_form::get_necessities_IS(Walker* walker) const{
+void Closed_form::get_necessities_IS(Walker* walker) const {
     qmc->get_system_ptr()->initialize(walker);
     qmc->get_gradients(walker);
 }
 
-void Closed_form::calculate_energy_necessities(Walker* walker) const{
+void Closed_form::calculate_energy_necessities(Walker* walker) const {
     qmc->get_sampling_ptr()->calculate_energy_necessities_CF(walker);
     qmc->get_laplsum(walker);
 }
 
-void Closed_form::update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const{
-    walker_post->slater_ratio = qmc->get_system_ptr()->get_spatial_ratio(walker_pre, walker_post, particle); 
+void Closed_form::update_necessities_IS(const Walker* walker_pre, Walker* walker_post, int particle) const {
+    walker_post->slater_ratio = qmc->get_system_ptr()->get_spatial_ratio(walker_pre, walker_post, particle);
     qmc->get_system_ptr()->calc_for_newpos(walker_pre, walker_post, particle);
     qmc->get_gradients(walker_post, particle);
 }
 
-void Closed_form::copy_walker_BF(const Walker* parent, Walker* child) const{
-
+void Closed_form::copy_walker_BF(const Walker* parent, Walker* child) const {
     child->value = parent->value;
 }
 
-void Closed_form::copy_walker_IS(const Walker* parent, Walker* child) const{
-    for (int i = 0; i < n_p; i++) {
-        for (int j = 0; j < dim; j++) {
-            child->jast_grad(i, j) = parent->jast_grad(i, j);
-            child->spatial_grad(i, j) = parent->spatial_grad(i, j);
-        }
-    }
+void Closed_form::copy_walker_IS(const Walker* parent, Walker* child) const {
+    child->jast_grad = parent->jast_grad;
+    child->spatial_grad = parent->spatial_grad;
 
     qmc->get_system_ptr()->copy_walker(parent, child);
 }
 
-void Closed_form::reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const{
+void Closed_form::reset_walker_IS(const Walker* walker_pre, Walker* walker_post, int particle) const {
 
     qmc->get_system_ptr()->reset_walker_ISCF(walker_pre, walker_post, particle);
-    
+
     int start = n2 * (particle >= n2);
 
     //updating the part with the same spin as the moved particle
     for (int i = start; i < n2 + start; i++) {
         for (int j = 0; j < dim; j++) {
-            walker_post->spatial_grad(i,j) = walker_pre->spatial_grad(i,j);
+            walker_post->spatial_grad(i, j) = walker_pre->spatial_grad(i, j);
         }
     }
 }

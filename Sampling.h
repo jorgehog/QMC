@@ -34,17 +34,22 @@ public:
     virtual void copy_walker(const Walker* parent, Walker* child) const = 0;
     virtual void reset_walker(const Walker* walker_pre, Walker* walker_post, int particle) const = 0;
 
+    double get_branching_Gfunc(Walker* walker_pre, Walker* walker_post, double E_T) const;
+
     void set_qmc_ptr(QMC* qmc) {
+        diffusion->set_qmc_ptr(qmc);
         this->qmc = qmc;
     }
 
-    bool get_importance_bool() {
-        return is_importance;
-    }
+//    bool get_importance_bool() {
+//        return is_importance;
+//    }
 
     double call_RNG() {
         return diffusion->call_RNG();
     }
+    
+    
 
 };
 
@@ -63,6 +68,8 @@ public:
     virtual void copy_walker(const Walker* parent, Walker* child) const;
     virtual void reset_walker(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
+
+
 };
 
 class Brute_Force : public Sampling {
@@ -76,11 +83,13 @@ public:
     virtual void get_necessities(Walker* walker) const;
     virtual void update_necessities(const Walker* walker_pre, Walker* walker_post, int particle) const;
 
-    virtual void calculate_energy_necessities_CF(Walker* walker) const; 
+    virtual void calculate_energy_necessities_CF(Walker* walker) const;
 
 
     virtual void copy_walker(const Walker* parent, Walker* child) const;
     virtual void reset_walker(const Walker* walker_pre, Walker* walker_post, int particle) const;
+
+
 };
 
 #endif	/* SAMPLING_H */

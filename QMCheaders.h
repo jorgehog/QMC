@@ -24,11 +24,11 @@
 #include "Orbitals.h"
 #include "Coulomb.h"
 #include "Potential.h"
-#include "Diffusion.h"
 #include "Jastrow.h"
 #include "System.h"
 
 class QMC;
+#include "Diffusion.h"
 #include "Sampling.h"
 #include "Kinetics.h"
 #include "QMC.h"

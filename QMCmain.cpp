@@ -16,40 +16,46 @@ using namespace std;
  */
 int main(int argc, char** argv) {
     int n_p, dim, n_c, numprocs, my_rank;
-    double alpha, beta, w, dt, h, cumul_e, cumul_e2, e, e2;
+    double alpha, beta, w, dt, h, cumul_e, cumul_e2, e, e2, E_T;
     long random_seed;
 
     //initializing MPI
-//    MPI_Init(&argc, &argv);
-//    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-//    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    //    MPI_Init(&argc, &argv);
+    //    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    //    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
 
-    random_seed = -1.234;//-time(NULL);
-//    random_seed = -time(NULL) - my_rank;
+    random_seed = -1.234; //-time(NULL);
+    //    random_seed = -time(NULL) - my_rank;
 
-    n_p = 30;
+    n_p = 2;
     dim = 2;
     w = 1;
 
-    n_c = 1000;
+    n_c = 1000000;
 
+    bool vmc = false;
+    bool dmc = true;
 
     string system = "QDots";
     string sampling = "BF";
     string kinetics_type = "Num";
 
+    bool dist_out = false;
+    bool dist_in = true;
 
     bool use_jastrow = true;
     bool use_coulomb = true;
-
-
 
 
     initVMC(n_p, dim, w, dt, system, sampling, alpha, beta);
     //cout << alpha << " " << beta << endl;
     if ((use_jastrow == false) && (use_coulomb == false)) {
         alpha = 1;
+    }
+    
+    if (dmc){
+        dt = 0.005;
     }
 
 
@@ -100,28 +106,47 @@ int main(int argc, char** argv) {
 
 
 
+    if (vmc) {
+        VMC* vmc = new VMC(n_p, dim, n_c, jastrow, sample_method, SYSTEM, kinetics, dist_out);
 
-    VMC* vmc = new VMC(n_p, dim, n_c, jastrow, sample_method, SYSTEM, kinetics);
+        vmc->run_method();
 
-    vmc->run_method();
 
-    
-//    cumul_e = cumul_e2 = 0;
-//    e = vmc->get_energy();
-//    e2 = vmc->get_e2();
-//    
-//    MPI_Reduce(&e, &cumul_e, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-//    MPI_Reduce(&e2, &cumul_e2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-//
-//    if (my_rank == 0) {
-//        vmc->set_e(e);
-//        vmc->set_e2(e2);
-//        
-//        vmc->output();
-//    }
-    vmc->output();
+        //    cumul_e = cumul_e2 = 0;
+        //    e = vmc->get_energy();
+        //    e2 = vmc->get_e2();
+        //    
+        //    MPI_Reduce(&e, &cumul_e, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        //    MPI_Reduce(&e2, &cumul_e2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        //
+        //    if (my_rank == 0) {
+        //        vmc->set_e(e);
+        //        vmc->set_e2(e2);
+        //        
+        //        vmc->output();
+        //    }
+        vmc->output();
+        if (dmc) {
+            E_T = vmc->get_energy();
+        }
+    }
 
-//    MPI_Finalize();
+    if (dmc) {
+
+        int n_w = 1000;
+        if (!vmc) {
+            E_T = 3.00031;
+        }
+        
+
+        DMC* dmc = new DMC(n_p, dim, n_w, n_c, E_T, jastrow, sample_method, SYSTEM, kinetics, dist_in);
+        dmc->run_method();
+        dmc->output();
+    }
+
+
+
+    //    MPI_Finalize();
     return 0;
 }
 
